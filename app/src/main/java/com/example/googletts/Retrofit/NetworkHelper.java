@@ -41,7 +41,7 @@ public class NetworkHelper {
 //        });
         retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://jsonplaceholder.typicode.com")
+                .baseUrl("https://121.131.17.243:5000")
                 .client(httpClient.build())
                 .build();
 

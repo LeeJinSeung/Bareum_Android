@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
         mImageButtonSpeaking = findViewById(R.id.imgbtn_speaking);
         mImageButtonAnalysis = findViewById(R.id.imgbtn_analysis);
+
+        Log.e("hi", "bye");
 
         mImageButtonSpeaking.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
     }
 

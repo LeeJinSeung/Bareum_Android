@@ -40,6 +40,8 @@ public class SentenceActivity extends AppCompatActivity {
         mButton = findViewById(R.id.button);
         sentenceDTO = new ArrayList();
 
+        Log.e("this activity: ","SentenceActivity open");
+
         requestSentence();
         Log.e("sentenceDTO size : ",Integer.toString(sentenceDTO.size()));
 
@@ -65,7 +67,8 @@ public class SentenceActivity extends AppCompatActivity {
 
     public void requestSentence() {
         NetworkHelper networkHelper = new NetworkHelper();
-        Call<List<TestDTO>> call = networkHelper.getApiService().REQUESTSENTENCE();
+        Call<List<TestDTO>> call = networkHelper.getApiService().requestSentence();
+        Log.e("Request : ", "sentence hihihihihii ");
         call.enqueue(new Callback<List<TestDTO>>() {
             @Override
             public void onResponse(Call<List<TestDTO>> call, Response<List<TestDTO>> response) {
@@ -103,9 +106,9 @@ public class SentenceActivity extends AppCompatActivity {
         TextView newTextView = new TextView(this);
         newTextView.setTextSize(25);
         newTextView.setPadding(0,12,0,12);
-        newTextView.setId(sentenceDTO.get(0).getId());
+        newTextView.setId(sentenceDTO.get(0).getSid());
         newTextView.setLayoutParams(lparams);
-        newTextView.setText(sentenceDTO.get(0).getTitle());
+        newTextView.setText(sentenceDTO.get(0).getSentence());
         sentenceDTO.remove(0);
         return newTextView;
     }

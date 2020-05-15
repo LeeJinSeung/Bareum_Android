@@ -1,9 +1,6 @@
 package com.example.googletts.Retrofit;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class SentenceDTO {
     ArrayList<TestDTO> sentenceList;

@@ -5,42 +5,39 @@ import com.google.gson.annotations.SerializedName;
 
 public class TestDTO {
 
-    @SerializedName("userid")
+    @SerializedName("sentenceId")
     @Expose
-    int uid;
+    int sid;
 
-    @SerializedName("id")
+    @SerializedName("sentenceData")
     @Expose
-    int id;
+    String sentence;
 
-    @SerializedName("title")
+    @SerializedName("standard")
     @Expose
-    String title;
+    String standard;
 
-    @SerializedName("body")
-    @Expose
-    String completed;
-
-    public TestDTO(int uid, int id, String title, String completed) {
-        this.uid = uid;
-        this.id = id;
-        this.title = title;
-        this.completed = completed;
+    public int getSid() {
+        return sid;
     }
 
-    public int getUid() { return uid; }
+    public void setSid(int sid) {
+        this.sid = sid;
+    }
 
-    public void setUid(int uid) { this.uid = uid; }
+    public String getSentence() {
+        return sentence;
+    }
 
-    public int getId() { return id; }
+    public void setSentence(String sentence) {
+        this.sentence = sentence;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public String getStandard() {
+        return standard;
+    }
 
-    public String getTitle() { return title; }
-
-    public void setTitle(String title) { this.title = title; }
-
-    public String isCompleted() { return completed; }
-
-    public void setCompleted(String completed) { this.completed = completed; }
+    public void setStandard(String standard) {
+        this.standard = standard;
+    }
 }

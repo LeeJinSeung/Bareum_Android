@@ -16,7 +16,7 @@ public interface ApiService {
     @POST(Config.SYNTHESIZE_ENDPOINT)
     Call<SynthesizeDTO> TTS(@Header (Config.API_KEY_HEADER) String token, @Body SynthesizeRequestDTO requestDTO); //해더에 key Authorization String 형태의 토큰을 요구함
 
-    @GET("/posts")
-    Call<List<TestDTO>> REQUESTSENTENCE();
+    @GET("/getSentence")
+    Call<List<TestDTO>> requestSentence();
 
 }
