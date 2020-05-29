@@ -19,8 +19,10 @@ import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
 import com.example.googletts.Retrofit.DTO.VoiceSelectionParams;
 import com.example.googletts.Retrofit.NetworkHelper;
+import com.example.googletts.Retrofit.TestDTO;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,10 +33,23 @@ public class AnalysisActivity extends AppCompatActivity {
     private String fileName;
     private ImageButton mImageButtonSpeak;
     private ImageButton mImageButtonSpeak2;
-    private TextView mTextSentence;
+    private TextView mTextSentenceData;
+    private TextView mTextStandard;
+    private TextView mTextResult;
+    private TextView mTextScore;
+    private TextView mTextRecoWord;
+    private TextView mTextRecoSentence;
+
     private Button mButtonFinish;
     private MediaPlayer mMediaPlayer;
 
+    private String sentenceData;
+    private String resultData;
+    private String standard;
+    private float score;
+    private String recommendWord;
+    private ArrayList<Integer> WrongIndex;
+    private TestDTO recommendSentence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +57,32 @@ public class AnalysisActivity extends AppCompatActivity {
         setContentView(R.layout.activity_analysis);
 
         Intent intent = getIntent();
+        // API 콜을 통해 받은 데이터
         fileName = intent.getExtras().getString("fileName");
+        sentenceData = intent.getExtras().getString("sentenceData");
+        resultData = intent.getExtras().getString("resultData");
+        standard = intent.getExtras().getString("standard");
+        score = intent.getExtras().getFloat("score")*100;
+        recommendWord = intent.getExtras().getString("recommendWord");
+        WrongIndex = intent.getExtras().getIntegerArrayList("WrongIndex");
+        recommendSentence = (TestDTO) intent.getSerializableExtra("recommendSentence");
 
         mImageButtonSpeak = findViewById(R.id.imgbtn_speaker);
         mImageButtonSpeak2 = findViewById(R.id.imgbtn_speaker2);
         mButtonFinish = findViewById(R.id.finish);
-        mTextSentence = findViewById(R.id.sentence);
+        mTextSentenceData = findViewById(R.id.sentenceData);
+        mTextStandard = findViewById(R.id.standard);
+        mTextResult = findViewById(R.id.result);
+        mTextScore = findViewById(R.id.score);
+        mTextRecoWord = findViewById(R.id.recommendWord);
+        mTextRecoSentence = findViewById(R.id.recommendSentence);
 
+        mTextSentenceData.setText(sentenceData);
+        mTextStandard.setText(standard);
+        mTextResult.setText(resultData);
+        mTextScore.setText(Float.toString(score));
+        mTextRecoWord.setText(recommendWord);
+        mTextRecoSentence.setText(recommendSentence.getSentence());
 
         mImageButtonSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,9 +93,7 @@ public class AnalysisActivity extends AppCompatActivity {
                 VoiceSelectionParams voice = new VoiceSelectionParams();
                 AudioConfig audio = new AudioConfig();
 
-
-                input.setText(mTextSentence.getText().toString());
-
+                input.setText(mTextSentenceData.getText().toString());
 
                 Call<SynthesizeDTO> call = networkHelper.getApiService().TTS(Config.API_KEY, new SynthesizeRequestDTO(input, voice, audio));
                 call.enqueue(new Callback<SynthesizeDTO>() {
@@ -105,6 +137,16 @@ public class AnalysisActivity extends AppCompatActivity {
                 }
                 mMediaPlayer.start();
                 Toast.makeText(getApplicationContext(),"playing..",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mTextRecoSentence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("recommend Click","Call");
+//                Intent intent = new Intent(AnalysisActivity.this, EvaluationActivity.class);
+//                intent.putExtra("recommendSentence", recommendSentence);
+//                startActivity(intent);
             }
         });
     }

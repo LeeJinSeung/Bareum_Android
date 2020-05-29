@@ -43,9 +43,8 @@ public class SentenceActivity extends AppCompatActivity {
         Log.e("this activity: ","SentenceActivity open");
 
         requestSentence();
+
         Log.e("sentenceDTO size : ",Integer.toString(sentenceDTO.size()));
-
-
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override

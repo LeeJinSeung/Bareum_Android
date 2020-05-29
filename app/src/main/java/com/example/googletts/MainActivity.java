@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         mImageButtonSpeaking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SentenceActivity.class);
+                Intent intent = new Intent(MainActivity.this, EvaluationActivity.class);
                 startActivity(intent);
             }
         });
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
     }
 

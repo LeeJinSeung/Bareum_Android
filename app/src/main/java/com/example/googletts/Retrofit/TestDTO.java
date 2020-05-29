@@ -3,34 +3,36 @@ package com.example.googletts.Retrofit;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TestDTO {
+import java.io.Serializable;
+
+public class TestDTO implements Serializable {
 
     @SerializedName("sentenceId")
     @Expose
-    int sid;
+    int sentenceId;
 
     @SerializedName("sentenceData")
     @Expose
-    String sentence;
+    String sentenceData;
 
     @SerializedName("standard")
     @Expose
     String standard;
 
     public int getSid() {
-        return sid;
+        return sentenceId;
     }
 
-    public void setSid(int sid) {
-        this.sid = sid;
+    public void setSid(int sentenceId) {
+        this.sentenceId = sentenceId;
     }
 
     public String getSentence() {
-        return sentence;
+        return sentenceData;
     }
 
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
+    public void setSentence(String sentenceData) {
+        this.sentenceData = sentenceData;
     }
 
     public String getStandard() {

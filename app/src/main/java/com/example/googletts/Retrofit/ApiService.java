@@ -3,10 +3,13 @@ package com.example.googletts.Retrofit;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -19,4 +22,7 @@ public interface ApiService {
     @GET("/getSentence")
     Call<List<TestDTO>> requestSentence();
 
+    @FormUrlEncoded
+    @POST("/getResult")
+    Call<ResultDTO> requestResult(@FieldMap HashMap<String, Object> param);
 }

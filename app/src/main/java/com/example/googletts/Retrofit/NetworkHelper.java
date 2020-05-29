@@ -41,8 +41,8 @@ public class NetworkHelper {
 //        });
         retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://121.131.17.243:5000")
-                .client(httpClient.build())
+                .baseUrl("http://127.0.0.1:5000")
+//                .client(httpClient.build())
                 .build();
 
         apiService = retrofit.create(ApiService.class); //실제 api Method들이선언된 Interface객체 선언
