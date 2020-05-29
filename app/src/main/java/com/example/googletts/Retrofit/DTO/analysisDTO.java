@@ -1,4 +1,4 @@
-package com.example.googletts.Retrofit;
+package com.example.googletts.Retrofit.DTO;
 
 import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.google.gson.annotations.Expose;

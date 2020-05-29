@@ -4,6 +4,7 @@ import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
 import com.example.googletts.Retrofit.DTO.TestDTO;
+import com.example.googletts.Retrofit.DTO.analysisDTO;
 
 import java.util.HashMap;
 import java.util.List;

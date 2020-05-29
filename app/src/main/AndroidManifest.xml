@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ResultActivity"></activity>
-        <activity android:name=".MypageActivity"></activity>
+        <activity android:name=".ResultActivity"/>
+        <activity android:name=".MypageActivity"/>
         <activity android:name=".AnalysisActivity" />
         <activity android:name=".SentenceActivity" />
         <activity android:name=".EvaluationActivity" />
