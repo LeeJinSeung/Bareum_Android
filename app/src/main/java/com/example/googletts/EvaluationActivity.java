@@ -26,7 +26,8 @@ import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
 import com.example.googletts.Retrofit.DTO.VoiceSelectionParams;
 import com.example.googletts.Retrofit.NetworkHelper;
-import com.example.googletts.Retrofit.ResultDTO;
+import com.example.googletts.Retrofit.TestDTO;
+import com.example.googletts.Retrofit.analysisDTO;
 import com.google.cloud.speech.v1.*;
 import com.google.protobuf.ByteString;
 
@@ -77,9 +78,13 @@ public class EvaluationActivity extends AppCompatActivity {
 
         mButtonNext.setEnabled(false);
 
+        Intent intent = getIntent();
+
+        TestDTO receiveSentence = (TestDTO)intent.getSerializableExtra("sentence");
+
         // TODO 전 액티비티에서 받아오기 + sentenceId
-        String sentenceData = "날씨가 참 맑다";
-        String standard = "날씨가 참 막따";
+        String sentenceData = receiveSentence.getSentence();
+        String standard = receiveSentence.getStandard();
 
         mTextSentenceData.setText(sentenceData);
         mTextStandard.setText(standard);
@@ -179,11 +184,11 @@ public class EvaluationActivity extends AppCompatActivity {
                     input.put("sentenceId", sentenceId);
                     // TODO stt api를 돌려서 나온 문장
                     input.put("sentenceData", resultData);
-                    apiService.requestResult(input).enqueue(new Callback<ResultDTO>() {
+                    apiService.requestResult(input).enqueue(new Callback<analysisDTO>() {
                         @Override
-                        public void onResponse(Call<ResultDTO> call, Response<ResultDTO> response) {
+                        public void onResponse(Call<analysisDTO> call, Response<analysisDTO> response) {
                             if (response.isSuccessful()) {
-                                ResultDTO body = response.body();
+                                analysisDTO body = response.body();
                                 if (body != null) {
                                     Log.d("data", body + "");
                                     Log.d("data.getScore()", body.getScore() + "");
@@ -214,7 +219,7 @@ public class EvaluationActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ResultDTO> call, Throwable t) {
+                        public void onFailure(Call<analysisDTO> call, Throwable t) {
                             System.out.println("onFailure"+call);
                             Log.e("Request", "Failure");
                         }

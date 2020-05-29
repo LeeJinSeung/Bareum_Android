@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ResultDTO {
+public class analysisDTO {
     private TestDTO recommendSentence;
     private String recommendWord;
     private float score;
@@ -14,8 +14,8 @@ public class ResultDTO {
     private List<Integer> wrongIndex;
     private String status;
 
-    public ResultDTO(TestDTO recommendSentence, String recommendWord, float score,
-                     List<Integer> standardBlank, List<Integer> userBlank, List<Integer> wrongIndex, String status)
+    public analysisDTO(TestDTO recommendSentence, String recommendWord, float score,
+                       List<Integer> standardBlank, List<Integer> userBlank, List<Integer> wrongIndex, String status)
     {
         this.recommendSentence = recommendSentence;
         this.recommendWord = recommendWord;

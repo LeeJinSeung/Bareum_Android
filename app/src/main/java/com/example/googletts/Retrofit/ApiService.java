@@ -24,5 +24,5 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("/getResult")
-    Call<ResultDTO> requestResult(@FieldMap HashMap<String, Object> param);
+    Call<analysisDTO> requestResult(@FieldMap HashMap<String, Object> param);
 }

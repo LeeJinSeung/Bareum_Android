@@ -65,7 +65,7 @@ public class AnalysisActivity extends AppCompatActivity {
         score = intent.getExtras().getFloat("score")*100;
         recommendWord = intent.getExtras().getString("recommendWord");
         WrongIndex = intent.getExtras().getIntegerArrayList("WrongIndex");
-        recommendSentence = (TestDTO) intent.getSerializableExtra("recommendSentence");
+        recommendSentence = (TestDTO)intent.getSerializableExtra("recommendSentence");
 
         mImageButtonSpeak = findViewById(R.id.imgbtn_speaker);
         mImageButtonSpeak2 = findViewById(R.id.imgbtn_speaker2);

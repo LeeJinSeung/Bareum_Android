@@ -10,14 +10,12 @@
         android:id="@+id/recommendLayout"
         android:layout_width="368dp"
         android:layout_height="165dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="36dp"
-        app:layout_constraintBottom_toTopOf="@+id/finish"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.627"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scoreLayout">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.704">
 
         <TextView
             android:id="@+id/textView3"
@@ -90,15 +88,12 @@
         android:id="@+id/userLayout"
         android:layout_width="276dp"
         android:layout_height="96dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="22dp"
+        android:layout_marginBottom="76dp"
         android:background="@drawable/border"
-        app:layout_constraintBottom_toTopOf="@+id/scoreLayout"
+        app:layout_constraintBottom_toTopOf="@+id/recommendLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.677"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/standardLayout">
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
             android:id="@+id/imgbtn_speaker2"
@@ -149,20 +144,21 @@
         android:id="@+id/finish"
         android:layout_width="95dp"
         android:layout_height="44dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="64dp"
         android:text="완료"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recommendLayout" />
+        app:layout_constraintHorizontal_bias="0.898"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scoreLayout"
         android:layout_width="106dp"
         android:layout_height="42dp"
-        android:layout_marginBottom="38dp"
-        app:layout_constraintBottom_toTopOf="@+id/recommendLayout"
-        app:layout_constraintEnd_toEndOf="@+id/userLayout"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.895"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userLayout">
 
         <TextView
@@ -191,8 +187,12 @@
         android:layout_width="272dp"
         android:layout_height="94dp"
         android:background="@drawable/border"
-        tools:layout_editor_absoluteX="75dp"
-        tools:layout_editor_absoluteY="94dp">
+        app:layout_constraintBottom_toTopOf="@+id/userLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.443">
 
         <TextView
             android:id="@+id/sentenceData"
