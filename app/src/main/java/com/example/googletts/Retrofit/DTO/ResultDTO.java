@@ -6,37 +6,39 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoreDTO {
+public class ResultDTO {
 
 
-    public ArrayList<Float> getScore() {
+    public List<Float> getScore() {
         return score;
     }
 
-    public void setScore(ArrayList<Float> score) {
+    public void setScore(List<Float> score) {
         this.score = score;
     }
 
-    public ArrayList<PhonemeDTO> getMostPhoneme() {
+    public List<ArrayList<String>> getMostPhoneme() {
         return mostPhoneme;
     }
 
-    public void setMostPhoneme(ArrayList<PhonemeDTO> mostPhoneme) {
+    public void setMostPhoneme(List<ArrayList<String>> mostPhoneme) {
         this.mostPhoneme = mostPhoneme;
     }
 
-    public ScoreDTO(ArrayList<Float> score, ArrayList<PhonemeDTO> mostPhoneme) {
+    public ResultDTO(List<Float> score, List<ArrayList<String>> mostPhoneme) {
         this.score = score;
         this.mostPhoneme = mostPhoneme;
     }
 
     @SerializedName("recentScore")
     @Expose
-    ArrayList<Float> score;
+    List<Float> score;
 
     @SerializedName("mostPhoneme")
     @Expose
-    ArrayList<PhonemeDTO> mostPhoneme;
+    List<ArrayList<String>> mostPhoneme;
 
+    public ResultDTO() {
 
+    }
 }

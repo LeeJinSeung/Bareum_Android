@@ -1,8 +1,9 @@
-package com.example.googletts.Retrofit;
+package com.example.googletts.Retrofit.DTO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SentenceDTO {
+public class SentenceDTO implements Serializable {
     ArrayList<TestDTO> sentenceList;
 
     public SentenceDTO(ArrayList<TestDTO> sentenceList) {
@@ -16,4 +17,5 @@ public class SentenceDTO {
     public void setSentenceList(ArrayList<TestDTO> sentenceList) {
         this.sentenceList = sentenceList;
     }
+
 }

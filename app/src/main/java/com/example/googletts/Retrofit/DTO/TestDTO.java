@@ -1,9 +1,11 @@
-package com.example.googletts.Retrofit;
+package com.example.googletts.Retrofit.DTO;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TestDTO {
+import java.io.Serializable;
+
+public class TestDTO implements Serializable {
 
     @SerializedName("sentenceId")
     @Expose
@@ -39,5 +41,10 @@ public class TestDTO {
 
     public void setStandard(String standard) {
         this.standard = standard;
+    }
+
+
+    public TestDTO getTestDTO() {
+        return this;
     }
 }

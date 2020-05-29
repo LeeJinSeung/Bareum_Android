@@ -24,6 +24,7 @@ import com.example.googletts.Retrofit.DTO.AudioConfig;
 import com.example.googletts.Retrofit.DTO.SynthesisInput;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
+import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.DTO.VoiceSelectionParams;
 import com.example.googletts.Retrofit.NetworkHelper;
 
@@ -46,7 +47,13 @@ public class EvaluationActivity extends AppCompatActivity {
     private MediaRecorder mRecorder;
     private String FileName = "";
 
-    public static final int request_code = 1000;
+    //TODO: sentence, standard로 변경
+    // private String sentence;
+    // private String standard;
+    // private int sentenceId;
+    private TestDTO sentence;
+
+
 
 
     @Override
@@ -54,11 +61,20 @@ public class EvaluationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation);
 
+        Intent intent = getIntent();
+        // sentenceId = intent.getExtras().getInt("sentenceId");
+        // sentence = intent.getExtras().getString("sentence");
+        // standard = intent.getExtras().getString("standard");
+        sentence = (TestDTO) intent.getSerializableExtra("sentence");
+
         mText = findViewById(R.id.text);
         mTextSentence = findViewById(R.id.sentence);
         mImageButtonSpeak = findViewById(R.id.imgbtn_speaker);
         mImageButtonMic = findViewById(R.id.imgbtn_mic);
         mButtonNext = findViewById(R.id.btn_next);
+
+        mText.setText(sentence.getSentence());
+        mTextSentence.setText(sentence.getStandard());
 
         mButtonNext.setEnabled(false);
 
@@ -105,48 +121,44 @@ public class EvaluationActivity extends AppCompatActivity {
             }
         });
 
-        if(checkPermissionFromDevice()) {
-            mImageButtonMic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TODO: 음성 파일 만들기
 
-                    FileName= getApplicationContext().getCacheDir().getAbsolutePath()+"/"+
-                            UUID.randomUUID()+"AudioFile.wav";
+        mImageButtonMic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: 음성 파일 만들기
 
-                    SetupMediaRecorder();
+                FileName= getApplicationContext().getCacheDir().getAbsolutePath()+"/"+
+                        UUID.randomUUID()+"AudioFile.wav";
 
-                    try {
-                        mRecorder.prepare();
-                        mRecorder.start();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mImageButtonMic.setEnabled(false);
-                    mButtonNext.setEnabled(true);
+                SetupMediaRecorder();
 
-                    Toast.makeText(getApplicationContext(),"녹음 시작",Toast.LENGTH_SHORT).show();
+                try {
+                    mRecorder.prepare();
+                    mRecorder.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
-            mButtonNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mRecorder.stop();
-                    mImageButtonMic.setEnabled(true);
-                    mButtonNext.setEnabled(false);
-                    Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
+                mImageButtonMic.setEnabled(false);
+                mButtonNext.setEnabled(true);
 
-                    //TODO: 서버로 음성파일 전송
+                Toast.makeText(getApplicationContext(),"녹음 시작",Toast.LENGTH_SHORT).show();
+            }
+        });
+        mButtonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecorder.stop();
+                mImageButtonMic.setEnabled(true);
+                mButtonNext.setEnabled(false);
+                Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(EvaluationActivity.this, AnalysisActivity.class);
-                    intent.putExtra("fileName", FileName);
-                    startActivity(intent);
-                }
-            });
-        }
-        else {
-            requestPermissionFromDevice();
-        }
+                //TODO: STT API 추가
+
+                Intent intent = new Intent(EvaluationActivity.this, AnalysisActivity.class);
+                intent.putExtra("fileName", FileName);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -178,30 +190,5 @@ public class EvaluationActivity extends AppCompatActivity {
         mRecorder.setOutputFile(FileName);
     }
 
-    private void requestPermissionFromDevice() {
-        ActivityCompat.requestPermissions(this,new String[] {
-                        Manifest.permission.RECORD_AUDIO},
-                request_code);
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case request_code:
-            {
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
-                    Toast.makeText(getApplicationContext(),"permission granted...",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"permission denied...",Toast.LENGTH_SHORT).show();
-                }
-            }
-            break;
-        }
-    }
-
-    private boolean checkPermissionFromDevice() {
-        int recorder_permssion=ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO);
-        return recorder_permssion == PackageManager.PERMISSION_GRANTED;
-    }
 }

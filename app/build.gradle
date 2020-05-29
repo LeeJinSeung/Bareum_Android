@@ -14,6 +14,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -21,6 +23,10 @@ android {
         }
     }
 
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -37,6 +43,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
 
     testImplementation 'junit:junit:4.12'

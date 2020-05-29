@@ -52,7 +52,7 @@
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="종합결과" />
+                android:text="마이페이지" />
         </TableRow>
     </TableLayout>
 

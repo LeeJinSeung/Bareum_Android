@@ -21,10 +21,10 @@
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.746"
+            app:layout_constraintHorizontal_bias="0.514"
             app:layout_constraintStart_toEndOf="@+id/sentence"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.528"
+            app:layout_constraintVertical_bias="0.581"
             app:srcCompat="@drawable/speaker" />
 
         <TextView
@@ -41,15 +41,15 @@
 
         <TextView
             android:id="@+id/sentence"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="안녕하세요"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.099"
+            app:layout_constraintHorizontal_bias="0.162"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.547" />
+            app:layout_constraintVertical_bias="0.575" />
 
         <TextView
             android:id="@+id/text"
