@@ -25,6 +25,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -32,6 +34,10 @@ android {
         }
     }
 
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -49,7 +55,12 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
+<<<<<<< HEAD
     implementation 'com.google.cloud:google-cloud-speech:0.32.0-alpha'
+=======
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+>>>>>>> 8f519e92f3fc030e1e59fe8afeae89f199cc75ea
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

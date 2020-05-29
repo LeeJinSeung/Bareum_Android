@@ -1,7 +1,9 @@
 package com.example.googletts.Retrofit;
 
+import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
+import com.example.googletts.Retrofit.DTO.TestDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,7 @@ import retrofit2.http.POST;
 public interface ApiService {
     // dummy url
     @POST(Config.SYNTHESIZE_ENDPOINT)
-    Call<SynthesizeDTO> TTS(@Header (Config.API_KEY_HEADER) String token, @Body SynthesizeRequestDTO requestDTO); //해더에 key Authorization String 형태의 토큰을 요구함
+    Call<SynthesizeDTO> TTS(@Header(Config.API_KEY_HEADER) String token, @Body SynthesizeRequestDTO requestDTO); //해더에 key Authorization String 형태의 토큰을 요구함
 
     @GET("/getSentence")
     Call<List<TestDTO>> requestSentence();
@@ -25,4 +27,7 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("/getResult")
     Call<analysisDTO> requestResult(@FieldMap HashMap<String, Object> param);
+
+    @GET("/getTotal")
+    Call<ResultDTO> requestTotal();
 }

@@ -24,9 +24,9 @@ import com.example.googletts.Retrofit.DTO.AudioConfig;
 import com.example.googletts.Retrofit.DTO.SynthesisInput;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
+import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.DTO.VoiceSelectionParams;
 import com.example.googletts.Retrofit.NetworkHelper;
-import com.example.googletts.Retrofit.TestDTO;
 import com.example.googletts.Retrofit.analysisDTO;
 import com.google.cloud.speech.v1.*;
 import com.google.protobuf.ByteString;
@@ -61,24 +61,32 @@ public class EvaluationActivity extends AppCompatActivity {
     private MediaRecorder mRecorder;
     private String FileName = "";
 
-    public static final int request_code = 1000;
-
+    //TODO: sentence, standard로 변경
+    // private String sentence;
+    // private String standard;
+    // private int sentenceId;
+    private TestDTO sentence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation);
 
-        mText = findViewById(R.id.sentenceData);
-        mTextSentenceData = findViewById(R.id.sentenceData);
+        Intent intent = getIntent();
+
+        sentence = (TestDTO) intent.getSerializableExtra("sentence");
+
+        mText = findViewById(R.id.text);
         mTextStandard = findViewById(R.id.standard);
+        mTextSentenceData = findViewById(R.id.sentenceData);
         mImageButtonSpeak = findViewById(R.id.imgbtn_speaker);
         mImageButtonMic = findViewById(R.id.imgbtn_mic);
         mButtonNext = findViewById(R.id.finish);
 
-        mButtonNext.setEnabled(false);
+        mText.setText(sentence.getSentence());
+        mTextSentenceData.setText(sentence.getStandard());
 
-        Intent intent = getIntent();
+        mButtonNext.setEnabled(false);
 
         TestDTO receiveSentence = (TestDTO)intent.getSerializableExtra("sentence");
 
@@ -130,29 +138,6 @@ public class EvaluationActivity extends AppCompatActivity {
             }
         });
 
-        if(checkPermissionFromDevice()) {
-            mImageButtonMic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TODO: 음성 파일 만들기
-
-                    FileName= getApplicationContext().getCacheDir().getAbsolutePath()+"/"+
-                            UUID.randomUUID()+"AudioFile.wav";
-
-                    SetupMediaRecorder();
-
-                    try {
-                        mRecorder.prepare();
-                        mRecorder.start();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mImageButtonMic.setEnabled(false);
-                    mButtonNext.setEnabled(true);
-
-                    Toast.makeText(getApplicationContext(),"녹음 시작",Toast.LENGTH_SHORT).show();
-                }
-            });
             mButtonNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -226,10 +211,22 @@ public class EvaluationActivity extends AppCompatActivity {
                     });
                 }
             });
-        }
-        else {
-            requestPermissionFromDevice();
-        }
+
+        mButtonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecorder.stop();
+                mImageButtonMic.setEnabled(true);
+                mButtonNext.setEnabled(false);
+                Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
+
+                //TODO: STT API 추가
+
+                Intent intent = new Intent(EvaluationActivity.this, AnalysisActivity.class);
+                intent.putExtra("fileName", FileName);
+                startActivity(intent);
+            }
+        });
     }
 
     private void playAudio(String base64EncodedString) {
@@ -260,27 +257,6 @@ public class EvaluationActivity extends AppCompatActivity {
         mRecorder.setOutputFile(FileName);
     }
 
-    private void requestPermissionFromDevice() {
-        ActivityCompat.requestPermissions(this,new String[] {
-                        Manifest.permission.RECORD_AUDIO},
-                request_code);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case request_code:
-            {
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
-                    Toast.makeText(getApplicationContext(),"permission granted...",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"permission denied...",Toast.LENGTH_SHORT).show();
-                }
-            }
-            break;
-        }
-    }
 
     private boolean checkPermissionFromDevice() {
         int recorder_permssion=ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO);

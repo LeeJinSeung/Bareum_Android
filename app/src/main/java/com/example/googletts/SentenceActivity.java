@@ -2,18 +2,17 @@ package com.example.googletts;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.example.googletts.Retrofit.NetworkHelper;
-import com.example.googletts.Retrofit.SentenceDTO;
-import com.example.googletts.Retrofit.TestDTO;
+import com.example.googletts.Retrofit.DTO.TestDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,41 +24,44 @@ import retrofit2.Response;
 
 
 public class SentenceActivity extends AppCompatActivity {
-    private ScrollView mScrollView;
-    private LinearLayout mLinearLayout;
+    // private ScrollView mScrollView;
+    // private LinearLayout mLinearLayout;
+    private ListView mListView;
     private Button mButton;
     private List<TestDTO> sentenceDTO;
+    private ArrayList<String> items;
+    private ArrayAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sentence);
 
-        mScrollView = findViewById(R.id.scrollView);
-        mLinearLayout = findViewById(R.id.linearLayout);
+        // mScrollView = findViewById(R.id.scrollView);
+        // mLinearLayout = findViewById(R.id.linearLayout);
+        mListView = findViewById(R.id.listView);
         mButton = findViewById(R.id.button);
         sentenceDTO = new ArrayList();
+        items = new ArrayList<String>();
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+
+        mListView.setAdapter((adapter));
 
         Log.e("this activity: ","SentenceActivity open");
 
         requestSentence();
-
         Log.e("sentenceDTO size : ",Integer.toString(sentenceDTO.size()));
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removeTextView();
                 Log.e("sentenceDTO size : ",Integer.toString(sentenceDTO.size()));
                 if(sentenceDTO.size() == 0) {
                     requestSentence();
                 }
-
-                for(int i=0; i<5; i++) {
-                    if(sentenceDTO.size() == 0) break;
-
-                    mLinearLayout.addView(createTextView());
-                }
-
+                createTextView();
             }
         });
     }
@@ -82,14 +84,9 @@ public class SentenceActivity extends AppCompatActivity {
                     return;
                 }
                 sentenceDTO = response.body();
-
-                for(int i=0; i<5; i++) {
-                    if(sentenceDTO.size() == 0) break;
-
-                    mLinearLayout.addView(createTextView());
-                }
-
                 Log.e("Request Success: ", sentenceDTO.toString());
+                createTextView();
+
             }
 
             @Override
@@ -100,15 +97,33 @@ public class SentenceActivity extends AppCompatActivity {
 
     }
 
-    public TextView createTextView() {
-        final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        TextView newTextView = new TextView(this);
-        newTextView.setTextSize(25);
-        newTextView.setPadding(0,12,0,12);
-        newTextView.setId(sentenceDTO.get(0).getSid());
-        newTextView.setLayoutParams(lparams);
-        newTextView.setText(sentenceDTO.get(0).getSentence());
-        sentenceDTO.remove(0);
-        return newTextView;
+    public void createTextView() {
+        for(int i=0; i<5 && i<sentenceDTO.size(); i++) {
+            items.add(sentenceDTO.get(i).getSentence());
+        }
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SentenceActivity.this, EvaluationActivity.class);
+                intent.putExtra("sentence", sentenceDTO.get(position).getTestDTO());
+
+                // intent.putExtra("sentence", sentenceDTO.get(position).getSentence());
+                // intent.putExtra("standard", sentenceDTO.get(position).getStandard());
+                startActivity(intent);
+            }
+        });
+
+        adapter.notifyDataSetChanged();
+    }
+
+    public void removeTextView() {
+        int count;
+        count = adapter.getCount();
+
+        for(int i=0;i<count;i++) {
+            items.remove(0);
+            sentenceDTO.remove(0);
+        }
+        adapter.notifyDataSetChanged();
     }
 }

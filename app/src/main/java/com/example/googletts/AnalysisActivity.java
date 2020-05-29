@@ -17,9 +17,9 @@ import com.example.googletts.Retrofit.DTO.AudioConfig;
 import com.example.googletts.Retrofit.DTO.SynthesisInput;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
+import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.DTO.VoiceSelectionParams;
 import com.example.googletts.Retrofit.NetworkHelper;
-import com.example.googletts.Retrofit.TestDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
