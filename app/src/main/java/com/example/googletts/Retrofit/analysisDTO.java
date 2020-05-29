@@ -1,5 +1,6 @@
 package com.example.googletts.Retrofit;
 
+import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
