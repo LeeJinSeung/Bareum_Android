@@ -178,8 +178,8 @@ public class EvaluationActivity extends AppCompatActivity {
                     // TODO STT api 신뢰도 테스트 필요함(=말하는 그대로 나오는가??)
                     recognitionSpeech(FileName);
 
-                    int sentenceId = 1;
-                    String resultData = "날시가 참 막따";
+                    int sentenceId = sentence.getSid();
+                    String resultData = "오늘 날씨가 찬 마따";
 
                     OkHttpClient.Builder builder = new OkHttpClient.Builder();
                     HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -187,7 +187,8 @@ public class EvaluationActivity extends AppCompatActivity {
                     builder.addInterceptor(interceptor);
 
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://10.0.2.2:5000")
+                            .baseUrl("http://3.34.21.128:5000/")
+                            // .baseUrl("http://10.0.2.2:5000/")
                             .addConverterFactory(GsonConverterFactory.create())
                             .client(builder.build())
                             .build();
@@ -222,6 +223,7 @@ public class EvaluationActivity extends AppCompatActivity {
                                                 .putExtra("recommendWord", body.getRecommendWord())
                                                 .putIntegerArrayListExtra("WrongIndex", (ArrayList<Integer>)body.getWrongIndex());
                                         startActivity(intent);
+                                        finish();
                                     }else if(response_status.equals("perfect")){
 
                                     }else if(response_status.equals("failure")) {

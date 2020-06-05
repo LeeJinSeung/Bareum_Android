@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,8 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ResultActivity"/>
-        <activity android:name=".MypageActivity"/>
+        <activity android:name=".UserSentenceActivity"></activity>
+        <activity android:name=".ResultActivity" />
+        <activity android:name=".MypageActivity" />
         <activity android:name=".AnalysisActivity" />
         <activity android:name=".SentenceActivity" />
         <activity android:name=".EvaluationActivity" />

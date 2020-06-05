@@ -149,6 +149,14 @@ public class AnalysisActivity extends AppCompatActivity {
 //                startActivity(intent);
             }
         });
+
+        mButtonFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AnalysisActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void playAudio(String base64EncodedString) {

@@ -3,10 +3,12 @@ package com.example.googletts.Retrofit.DTO;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.List;
 
-public class ResultDTO {
+public class ResultDTO implements Serializable {
 
 
     public List<Float> getScore() {
@@ -30,6 +32,10 @@ public class ResultDTO {
         this.mostPhoneme = mostPhoneme;
     }
 
+    public ResultDTO() {
+
+    }
+
     @SerializedName("recentScore")
     @Expose
     List<Float> score;
@@ -37,8 +43,4 @@ public class ResultDTO {
     @SerializedName("mostPhoneme")
     @Expose
     List<ArrayList<String>> mostPhoneme;
-
-    public ResultDTO() {
-
-    }
 }

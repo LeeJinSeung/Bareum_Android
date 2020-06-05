@@ -1,6 +1,7 @@
 package com.example.googletts;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.googletts.Retrofit.NetworkHelper;
+
 import com.example.googletts.Retrofit.DTO.TestDTO;
+import com.example.googletts.Retrofit.NetworkHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,24 +24,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+public class UserSentenceActivity extends AppCompatActivity {
 
-public class SentenceActivity extends AppCompatActivity {
-    // private ScrollView mScrollView;
-    // private LinearLayout mLinearLayout;
     private ListView mListView;
     private Button mButton;
     private List<TestDTO> sentenceDTO;
     private ArrayList<String> items;
     private ArrayAdapter adapter;
+    private String delResult;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sentence);
+        setContentView(R.layout.activity_user_sentence);
 
-        // mScrollView = findViewById(R.id.scrollView);
-        // mLinearLayout = findViewById(R.id.linearLayout);
         mListView = findViewById(R.id.listView);
         mButton = findViewById(R.id.button);
         sentenceDTO = new ArrayList();
@@ -68,7 +67,7 @@ public class SentenceActivity extends AppCompatActivity {
 
     public void requestSentence() {
         NetworkHelper networkHelper = new NetworkHelper();
-        Call<List<TestDTO>> call = networkHelper.getApiService().requestSentence();
+        Call<List<TestDTO>> call = networkHelper.getApiService().requestUserSentence();
         Log.e("Request : ", "sentence hihihihihii ");
         call.enqueue(new Callback<List<TestDTO>>() {
             @Override
@@ -103,9 +102,41 @@ public class SentenceActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SentenceActivity.this, EvaluationActivity.class);
-                intent.putExtra("sentence", sentenceDTO.get(position));
-                startActivity(intent);
+                NetworkHelper networkHelper = new NetworkHelper();
+                int sid = sentenceDTO.get(position).getSid();
+                ArrayList<Integer> arrayList = new ArrayList<>();
+                // arrayList.add(sentenceDTO.get(position).getSid());
+                arrayList.add(38);
+                arrayList.add(39);
+                Log.e("arraylist", arrayList.toString());
+                Call<String> call = networkHelper.getApiService().postDeleteSentaence(arrayList);
+                Log.e("sid", Integer.toString(sid));
+                Log.e("Request : ", "sentence hihihihihii ");
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (!response.isSuccessful()) {
+                            try {
+                                Log.e("Request Message", response.errorBody().string());
+                            } catch (IOException e) {
+                                Log.e("Request IOException", "fuck");
+                            }
+                            return;
+                        }
+                        delResult = response.body();
+                        Log.e("response", "OK");
+
+                        if(delResult.contains("delSentenceControl success")) {
+                            // success
+                            Log.e("delete", "success");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.e("Request : ", "fail " + t.getCause());
+                    }
+                });
             }
         });
 
@@ -122,4 +153,6 @@ public class SentenceActivity extends AppCompatActivity {
         }
         adapter.notifyDataSetChanged();
     }
+
+
 }
