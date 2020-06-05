@@ -26,7 +26,7 @@ import com.example.googletts.Retrofit.DTO.AudioConfig;
 import com.example.googletts.Retrofit.DTO.SynthesisInput;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
-import com.example.googletts.Retrofit.DTO.TestDTO;
+import com.example.googletts.Retrofit.DTO.messageDTO;
 import com.example.googletts.Retrofit.DTO.VoiceSelectionParams;
 import com.example.googletts.Retrofit.NetworkHelper;
 
@@ -192,7 +192,13 @@ public class AnalysisActivity extends AppCompatActivity {
                 AlertDialog.Builder alert_confirm = new AlertDialog.Builder(AnalysisActivity.this);
                 alert_confirm.setMessage("단어장에 추가하겠습니다?")
                         .setCancelable(false)
-                        .setPositiveButton("추가", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("취", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                return;
+                            }
+                        })
+                        .setNegativeButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 단어장에 단어 추가
@@ -200,35 +206,28 @@ public class AnalysisActivity extends AppCompatActivity {
 
                                 Call call = networkHelper.getApiService().insertWordBook(wordData);
 
-                                call.enqueue(new Callback<ResponseBody>() {
+                                call.enqueue(new Callback<messageDTO>() {
                                     @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    public void onResponse(Call<messageDTO> call, Response<messageDTO> response) {
                                         if (response.isSuccessful()) {
-                                            ResponseBody body = response.body();
+                                            messageDTO body = response.body();
                                             if (body != null) {
-                                                Log.e("body", body.toString());
-                                                Log.e("response", response.toString());
-                                                Log.e("call", call.toString());
+                                                String responseMessage = body.getMessage();
 
-                                                //TODO return값에 따라 Toast 띄워주기 (추가 성공 / 중복 때문에 실패)
+                                                if(responseMessage.equals("insWordBookControl Success"))
+                                                    Toast.makeText(getApplicationContext(),"추가되었습니다.",Toast.LENGTH_SHORT).show();
+                                                else if(responseMessage.equals("duplicate word"))
+                                                    Toast.makeText(getApplicationContext(),"이미 단어장에 존재합니.",Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }
 
                                     @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    public void onFailure(Call<messageDTO> call, Throwable t) {
                                         System.out.println("onFailure" + call);
                                         Log.e("Request", "Failure");
                                     }
                                 });
-
-                                Toast.makeText(getApplicationContext(),"추가되었습니다.",Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                return;
                             }
                         });
                 AlertDialog alert = alert_confirm.create();
