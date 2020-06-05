@@ -9,15 +9,15 @@ public class TestDTO implements Serializable {
 
     @SerializedName("sentenceId")
     @Expose
-    int sentenceId;
+    private int sentenceId;
 
     @SerializedName("sentenceData")
     @Expose
-    String sentenceData;
+    private String sentenceData;
 
     @SerializedName("standard")
     @Expose
-    String standard;
+    private String standard;
 
     public int getSid() {
         return sentenceId;

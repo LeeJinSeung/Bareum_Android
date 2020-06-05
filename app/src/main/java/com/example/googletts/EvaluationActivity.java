@@ -2,6 +2,7 @@ package com.example.googletts;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -11,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +33,7 @@ import com.example.googletts.Retrofit.DTO.analysisDTO;
 import com.google.cloud.speech.v1.*;
 import com.google.protobuf.ByteString;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,7 +43,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -169,63 +175,57 @@ public class EvaluationActivity extends AppCompatActivity {
             mButtonNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    NetworkHelper networkHelper = new NetworkHelper();
+                    int sentenceId = sentence.getSid();
+
                     mRecorder.stop();
                     mImageButtonMic.setEnabled(true);
                     mButtonNext.setEnabled(false);
-//                    Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
 
-                    //STT API로 나온 음성 결과 서버로 전송
-                    // TODO STT api 신뢰도 테스트 필요함(=말하는 그대로 나오는가??)
-                    recognitionSpeech(FileName);
-
-                    int sentenceId = 1;
-                    String resultData = "날시가 참 막따";
+                    Log.e("SoundFile path", FileName);
 
                     OkHttpClient.Builder builder = new OkHttpClient.Builder();
                     HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
                     interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
                     builder.addInterceptor(interceptor);
 
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://10.0.2.2:5000")
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .client(builder.build())
-                            .build();
-                    ApiService apiService = retrofit.create(ApiService.class);
-                    HashMap<String, Object> input = new HashMap<>();
-                    // TODO 전 액티비티에서 받은 sentenceId
-                    input.put("sentenceId", sentenceId);
-                    // TODO stt api를 돌려서 나온 문장
-                    input.put("sentenceData", resultData);
-                    apiService.requestResult(input).enqueue(new Callback<analysisDTO>() {
+                    File file = new File(FileName);
+                    Log.e("FileName", file.getName());
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
+                    MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("receiveFile", file.getName(), requestBody);
+                    RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
+                    RequestBody sid = RequestBody.create(MediaType.parse("text/plain"), Integer.toString(sentenceId));
+
+                    Call call = networkHelper.getApiService().requestResult(fileToUpload, filename, sid);
+
+                    call.enqueue(new Callback<analysisDTO>() {
                         @Override
                         public void onResponse(Call<analysisDTO> call, Response<analysisDTO> response) {
                             if (response.isSuccessful()) {
                                 analysisDTO body = response.body();
                                 if (body != null) {
                                     Log.d("data", body + "");
-                                    Log.d("data.getScore()", body.getScore() + "");
-                                    Log.d("data.getRecommendWord()", body.getRecommendWord() + "");
-                                    Log.d("data.getWrongIndex()", body.getWrongIndex() + "");
-                                    Log.d("data.getRecoSentence()", body.getRecommendSentence() + "");
-                                    Log.e("postData end", "======================================");
 
                                     String response_status = body.getStatus();
 
                                     Log.d("response status", response_status);
 
-                                    if(response_status.equals("success")){
+                                    if(response_status.equals("failure")) {
+                                        Toast.makeText(getApplicationContext(),"다시 시도해 주세요.",Toast.LENGTH_SHORT).show();
+                                    }else if(response_status.equals("perfect")){
                                         Intent intent = new Intent(EvaluationActivity.this, AnalysisActivity.class);
-                                        intent.putExtra("fileName", FileName).putExtra("resultData", resultData)
+                                        intent.putExtra("fileName", FileName).putExtra("resultData", body.getResultData())
+                                                .putExtra("score", body.getScore()).putExtra("status", body.getStatus())
+                                                .putExtra("sentenceData", sentenceData).putExtra("standard", standard);
+                                        startActivity(intent);
+                                    }else{
+                                        Intent intent = new Intent(EvaluationActivity.this, AnalysisActivity.class);
+                                        intent.putExtra("fileName", FileName).putExtra("resultData", body.getResultData())
                                                 .putExtra("sentenceData", sentenceData).putExtra("standard", standard)
-                                                .putExtra("score", body.getScore()).putExtra("recommendSentence", body.getRecommendSentence())
-                                                .putExtra("recommendWord", body.getRecommendWord())
+                                                .putExtra("score", body.getScore()).putExtra("status", body.getStatus())
+                                                .putStringArrayListExtra("wordList", (ArrayList<String>)body.getWordList())
                                                 .putIntegerArrayListExtra("WrongIndex", (ArrayList<Integer>)body.getWrongIndex());
                                         startActivity(intent);
-                                    }else if(response_status.equals("perfect")){
-
-                                    }else if(response_status.equals("failure")) {
-                                        Toast.makeText(getApplicationContext(),"다시 시도해 주세요.",Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -269,9 +269,9 @@ public class EvaluationActivity extends AppCompatActivity {
 
     private void SetupMediaRecorder() {
         mRecorder=new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION);
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mRecorder.setOutputFile(FileName);
     }
 
@@ -300,57 +300,5 @@ public class EvaluationActivity extends AppCompatActivity {
             }
             break;
         }
-    }
-
-
-    // 1분 미만의 오디오 파일일때
-    public static void recognitionSpeech(String filePath) {
-        try {
-            SpeechClient speech = SpeechClient.create(); // Client 생성
-
-            // 오디오 파일에 대한 설정부분
-            RecognitionConfig config = RecognitionConfig.newBuilder()
-                    .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
-                    .setSampleRateHertz(16000)
-                    .setLanguageCode("ko-KR")
-                    .build();
-
-            RecognitionAudio audio = getRecognitionAudio(filePath); // Audio 파일에 대한 RecognitionAudio 인스턴스 생성
-            RecognizeResponse response = speech.recognize(config, audio); // 요청에 대한 응답
-            List<SpeechRecognitionResult> results = response.getResultsList(); // 응답 결과들
-
-            for (SpeechRecognitionResult result: results) {
-                SpeechRecognitionAlternative alternative = result.getAlternativesList().get(0);
-                System.out.printf("Transcription: %s%n", alternative.getTranscript());
-            }
-
-            speech.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Local 이나 Remote이거나 구분해서 RecognitionAudio 만들어 주는 부분
-    public static RecognitionAudio getRecognitionAudio(String filePath) throws IOException {
-        RecognitionAudio recognitionAudio;
-
-        // 파일이 GCS에 있는 경우
-        if (filePath.startsWith("gs://")) {
-            recognitionAudio = RecognitionAudio.newBuilder()
-                    .setUri(filePath)
-                    .build();
-        }
-        else { // 파일이 로컬에 있는 경우
-            Path path = Paths.get(filePath);
-            byte[] data = Files.readAllBytes(path);
-            ByteString audioBytes = ByteString.copyFrom(data);
-
-            recognitionAudio = RecognitionAudio.newBuilder()
-                    .setContent(audioBytes)
-                    .build();
-        }
-
-        return recognitionAudio;
     }
 }
