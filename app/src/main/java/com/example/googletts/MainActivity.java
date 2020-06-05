@@ -9,15 +9,26 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.googletts.Retrofit.DTO.ResultDTO;
+import com.example.googletts.Retrofit.NetworkHelper;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton mImageButtonSpeaking;
     private ImageButton mImageButtonAnalysis;
+    private ResultDTO result;
 
     public static final int request_code = 1000;
     @Override
@@ -27,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         mImageButtonSpeaking = findViewById(R.id.imgbtn_speaking);
         mImageButtonAnalysis = findViewById(R.id.imgbtn_analysis);
+        result = new ResultDTO();
 
         Log.e("hi", "bye");
 
@@ -46,8 +58,36 @@ public class MainActivity extends AppCompatActivity {
         mImageButtonAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                startActivity(intent);
+                NetworkHelper networkHelper = new NetworkHelper();
+                Call<ResultDTO> call = networkHelper.getApiService().requestTotal();
+                call.enqueue(new Callback<ResultDTO>() {
+                    @Override
+                    public void onResponse(Call<ResultDTO> call, Response<ResultDTO> response) {
+                        Log.e("Request : ", "success " + response.isSuccessful());
+                        Log.e("Request code", Integer.toString(response.code()));
+                        if (!response.isSuccessful()) {
+                            try {
+                                Log.e("Request Message", response.errorBody().string());
+                            } catch (IOException e) {
+                                Log.e("Request IOException", "fuck");
+                            }
+                            return;
+                        }
+                        result = response.body();
+
+                        Log.e("Request phoneme: ", result.getMostPhoneme().toString());
+                        Log.e("Request score: ", result.getScore().toString());
+
+                        Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                        intent.putExtra("result", result);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResultDTO> call, Throwable t) {
+                        Log.e("Request : ", "fail " + t.getCause());
+                    }
+                });
             }
         });
 
