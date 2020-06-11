@@ -2,6 +2,7 @@ package com.example.googletts;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -58,6 +59,7 @@ public class ResultActivity extends AppCompatActivity {
 
             LineDataSet set1;
             set1 = new LineDataSet(values, "최근 발음 평가 점수");
+            set1.setColor(ContextCompat.getColor(chart.getContext(), R.color.colorMain));
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1); // add the data sets

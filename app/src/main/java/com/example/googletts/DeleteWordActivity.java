@@ -75,8 +75,8 @@ public class DeleteWordActivity extends AppCompatActivity {
         //return super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.action_settings1:
-                // 문장 추가 삭제 완료.
-                Toast.makeText(getApplicationContext(), "문장삭제 확인 클릭", Toast.LENGTH_LONG).show();
+                // 단어 추가 삭제 완료.
+                Toast.makeText(getApplicationContext(), "단어 삭제 확인 클릭", Toast.LENGTH_LONG).show();
 
                 ArrayList<Integer> selectedItems = new ArrayList<>();
                 ArrayList<Integer> delIdx = new ArrayList<>();
@@ -97,7 +97,7 @@ public class DeleteWordActivity extends AppCompatActivity {
                 Log.e("idx", delIdx.toString());
 
                 NetworkHelper networkHelper = new NetworkHelper();
-                Call<messageDTO> call = networkHelper.getApiService().deleteSentaence(selectedItems);
+                Call<messageDTO> call = networkHelper.getApiService().deleteWordBook(selectedItems);
 
                 call.enqueue(new Callback<messageDTO>() {
                     @Override
@@ -112,8 +112,8 @@ public class DeleteWordActivity extends AppCompatActivity {
                         }
                         delResult = response.body();
                         Log.e("response", "OK");
-
-                        if(delResult.getMessage().contains("delWordBookControl success")) {
+                        Log.e("response message", delResult.getMessage());
+                        if(delResult.getMessage().contains("delWordBookControl Success")) {
                             // success
                             Log.e("delete", "success");
                             Intent intent = new Intent(DeleteWordActivity.this, WordbookActivity.class);

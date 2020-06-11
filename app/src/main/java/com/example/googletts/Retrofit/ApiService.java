@@ -55,9 +55,9 @@ public interface ApiService<Int> {
 
     @FormUrlEncoded
     @POST("/insertWordBook")
-    Call<messageDTO> insertWordBook(@Field("sentenceData") String sentence);
+    Call<messageDTO> insertWordBook(@Field("wordData") String sentence);
 
     @FormUrlEncoded
     @POST("/deleteWordBook")
-    Call<messageDTO> deleteWordBook(@Field("sentenceId") ArrayList<Integer> list);
+    Call<messageDTO> deleteWordBook(@Field("wordbookId") ArrayList<Integer> list);
 }

@@ -74,11 +74,11 @@ public class AddWordActivity extends AppCompatActivity {
 
                         if(insResult.getMessage().contains("duplicate word")) {
                             //TODO: 문장 중복
-                            Log.e("sentence", " duplicate");
+                            Log.e("sentence", " duplicate word");
                             Toast.makeText(getApplicationContext(), "이미 존재하는 단어입니다.", Toast.LENGTH_LONG).show();
                         }
                         else if(insResult.getMessage().contains("insWordBookControl Success")) {
-                            Log.e("insert", "success");
+                            Log.e("insert", "insWordBookControl Success");
                             Toast.makeText(getApplicationContext(), "단어추가 완료", Toast.LENGTH_LONG).show();
 
 

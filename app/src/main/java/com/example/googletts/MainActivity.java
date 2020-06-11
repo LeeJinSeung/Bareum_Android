@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Request : ", "fail " + t.getCause());
                     }
                 });
-                Intent intent = new Intent(MainActivity.this, UserSentenceActivity.class);
+                Intent intent = new Intent(MainActivity.this, WordbookActivity.class);
                 startActivity(intent);
             }
         });

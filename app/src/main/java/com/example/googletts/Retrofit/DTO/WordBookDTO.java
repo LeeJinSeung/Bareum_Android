@@ -1,8 +1,9 @@
 package com.example.googletts.Retrofit.DTO;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class WordBookDTO {
+public class WordBookDTO implements Serializable {
     private int wordbookId;
     private String wordData;
     private List<TestDTO> recommend;
