@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private ResultDTO result;
     private List<TestDTO> sentence;
 
-
-
     public static final int request_code = 1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Request phoneme: ", result.getMostPhoneme().toString());
                         Log.e("Request score: ", result.getScore().toString());
 
-                         Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                         intent.putExtra("result", result);
+                         Intent intent = new Intent(MainActivity.this, UserSentenceActivity.class);
+//                         intent.putExtra("result", result);
                          startActivity(intent);
                     }
 
@@ -127,12 +125,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Request : ", "fail " + t.getCause());
                     }
                 });
-<<<<<<< HEAD
-                Intent intent = new Intent(MainActivity.this, WordbookActivity.class);
-                startActivity(intent);
-=======
-
->>>>>>> 31713578d750cba8319dd4d46c0412030ed5a7b6
             }
         });
 
