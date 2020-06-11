@@ -28,7 +28,7 @@ public class SentenceActivity extends AppCompatActivity {
     // private LinearLayout mLinearLayout;
     private ListView mListView;
     private Button mButton;
-    private List<TestDTO> sentenceDTO;
+    private List<TestDTO> sentence;
     private ArrayList<String> items;
     private ArrayAdapter adapter;
 
@@ -40,25 +40,26 @@ public class SentenceActivity extends AppCompatActivity {
 
         // mScrollView = findViewById(R.id.scrollView);
         // mLinearLayout = findViewById(R.id.linearLayout);
+        Intent intent = getIntent();
         mListView = findViewById(R.id.listView);
         mButton = findViewById(R.id.button);
-        sentenceDTO = new ArrayList();
-        items = new ArrayList<String>();
+        sentence = (List<TestDTO>) intent.getSerializableExtra("sentence");
+        items = new ArrayList<>();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
 
         mListView.setAdapter((adapter));
 
         Log.e("this activity: ","SentenceActivity open");
 
-        requestSentence();
-        Log.e("sentenceDTO size : ",Integer.toString(sentenceDTO.size()));
+        createTextView();
+        // Log.e("sentenceDTO size : ",Integer.toString(sentence.size()));
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 removeTextView();
-                Log.e("sentenceDTO size : ",Integer.toString(sentenceDTO.size()));
-                if(sentenceDTO.size() == 0) {
+                Log.e("sentenceDTO size : ",Integer.toString(sentence.size()));
+                if(sentence.size() == 0) {
                     requestSentence();
                 }
                 createTextView();
@@ -83,8 +84,8 @@ public class SentenceActivity extends AppCompatActivity {
                     }
                     return;
                 }
-                sentenceDTO = response.body();
-                Log.e("Request Success: ", sentenceDTO.toString());
+                sentence = response.body();
+                Log.e("Request Success: ", sentence.toString());
                 createTextView();
             }
 
@@ -97,14 +98,14 @@ public class SentenceActivity extends AppCompatActivity {
     }
 
     public void createTextView() {
-        for(int i=0; i<10 && i<sentenceDTO.size(); i++) {
-            items.add(sentenceDTO.get(i).getSentence());
+        for(int i=0; i<10 && i<sentence.size(); i++) {
+            items.add(sentence.get(i).getSentence());
         }
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SentenceActivity.this, EvaluationActivity.class);
-                intent.putExtra("sentence", sentenceDTO.get(position));
+                intent.putExtra("sentence", sentence.get(position));
                 startActivity(intent);
             }
         });
@@ -118,7 +119,7 @@ public class SentenceActivity extends AppCompatActivity {
 
         for(int i=0;i<count;i++) {
             items.remove(0);
-            sentenceDTO.remove(0);
+            sentence.remove(0);
         }
         adapter.notifyDataSetChanged();
     }

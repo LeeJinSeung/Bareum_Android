@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".UserSentenceActivity">
 
@@ -20,11 +21,5 @@
         android:layout_height="0dp"
         android:layout_weight="0.1"
         android:text="다음문장" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="종합결과" />
 
 </LinearLayout>

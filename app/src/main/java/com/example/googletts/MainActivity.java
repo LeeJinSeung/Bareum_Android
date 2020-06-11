@@ -20,7 +20,11 @@ import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.NetworkHelper;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.transform.Result;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mImageButtonSpeaking = findViewById(R.id.imgbtn_speaking);
         mImageButtonAnalysis = findViewById(R.id.imgbtn_analysis);
         result = new ResultDTO();
+        sentence = new ArrayList<>();
 
         Log.e("hi", "bye");
 
@@ -51,36 +56,38 @@ public class MainActivity extends AppCompatActivity {
             requestPermissionFromDevice();
         }
 
-        NetworkHelper networkHelper = new NetworkHelper();
-        Call<List<TestDTO>> call = networkHelper.getApiService().requestSentence();
-        Log.e("Request : ", "sentence hihihihihii ");
-        call.enqueue(new Callback<List<TestDTO>>() {
-            @Override
-            public void onResponse(Call<List<TestDTO>> call, Response<List<TestDTO>> response) {
-                Log.e("Request : ", "success " + response.isSuccessful());
-                Log.e("Request code", Integer.toString(response.code()));
-                if (!response.isSuccessful()) {
-                    try {
-                        Log.e("Request Message", response.errorBody().string());
-                    } catch (IOException e) {
-                        Log.e("Request IOException", "fuck");
-                    }
-                    return;
-                }
-                sentence = response.body();
-                Log.e("Request Success: ", sentence.toString());
-            }
-
-            @Override
-            public void onFailure(Call<List<TestDTO>> call, Throwable t) {
-                Log.e("Request : ", "fail " + t.getCause());
-            }
-        });
 
         mImageButtonSpeaking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: sentence 넘기기
+                NetworkHelper networkHelper = new NetworkHelper();
+                Call<List<TestDTO>> call = networkHelper.getApiService().requestSentence();
+                Log.e("Request : ", "sentence hihihihihii ");
+                call.enqueue(new Callback<List<TestDTO>>() {
+                    @Override
+                    public void onResponse(Call<List<TestDTO>> call, Response<List<TestDTO>> response) {
+                        Log.e("Request : ", "success " + response.isSuccessful());
+                        Log.e("Request code", Integer.toString(response.code()));
+                        if (!response.isSuccessful()) {
+                            try {
+                                Log.e("Request Message", response.errorBody().string());
+                            } catch (IOException e) {
+                                Log.e("Request IOException", "fuck");
+                            }
+                            return;
+                        }
+                        sentence = response.body();
+                        Log.e("Request Success: ", sentence.toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<TestDTO>> call, Throwable t) {
+                        Log.e("Request : ", "fail " + t.getCause());
+                    }
+                });
                 Intent intent = new Intent(MainActivity.this, SentenceActivity.class);
+                intent.putExtra("sentence", (Serializable) sentence);
                 startActivity(intent);
             }
         });
@@ -89,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         mImageButtonAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: result 넘기기
                 NetworkHelper networkHelper = new NetworkHelper();
                 Call<ResultDTO> call = networkHelper.getApiService().requestTotal();
                 call.enqueue(new Callback<ResultDTO>() {
@@ -109,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Request phoneme: ", result.getMostPhoneme().toString());
                         Log.e("Request score: ", result.getScore().toString());
 
-                        Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                        intent.putExtra("result", result);
-                        startActivity(intent);
+                         Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                         intent.putExtra("result", result);
+                         startActivity(intent);
                     }
 
                     @Override
@@ -119,8 +127,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Request : ", "fail " + t.getCause());
                     }
                 });
-                Intent intent = new Intent(MainActivity.this, UserSentenceActivity.class);
-                startActivity(intent);
+
             }
         });
 

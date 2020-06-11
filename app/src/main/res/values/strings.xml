@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">한발짝</string>
+    <string name="title_result">종합결과</string>
+    <string name="title_sentence">사용자문장</string>
+    <string name="title_word">단어장</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_mypage">MypageActivity</string>
 </resources>

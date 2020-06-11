@@ -15,11 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddSentenceActivity"></activity>
+        <activity android:name=".AddSentenceActivity" />
         <activity android:name=".DeleteSentenceActivity" />
         <activity android:name=".UserSentenceActivity" />
         <activity android:name=".ResultActivity" />
-        <activity android:name=".MypageActivity" />
         <activity android:name=".AnalysisActivity" />
         <activity android:name=".SentenceActivity" />
         <activity android:name=".EvaluationActivity" />
