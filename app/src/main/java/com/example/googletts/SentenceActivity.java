@@ -97,7 +97,7 @@ public class SentenceActivity extends AppCompatActivity {
     }
 
     public void createTextView() {
-        for(int i=0; i<5 && i<sentenceDTO.size(); i++) {
+        for(int i=0; i<10 && i<sentenceDTO.size(); i++) {
             items.add(sentenceDTO.get(i).getSentence());
         }
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

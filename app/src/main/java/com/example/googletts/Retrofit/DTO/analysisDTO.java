@@ -7,33 +7,28 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class analysisDTO {
-    private TestDTO recommendSentence;
-    private String recommendWord;
     private float score;
     private List<Integer> standardBlank;
     private List<Integer> userBlank;
     private List<Integer> wrongIndex;
+    private List<String> wordList;
+    private String resultData;
     private String status;
 
-    public analysisDTO(TestDTO recommendSentence, String recommendWord, float score,
-                       List<Integer> standardBlank, List<Integer> userBlank, List<Integer> wrongIndex, String status)
+    public analysisDTO(List<String> wordList, float score,
+                       List<Integer> standardBlank, List<Integer> userBlank, List<Integer> wrongIndex,
+                       String status, String resultData)
     {
-        this.recommendSentence = recommendSentence;
-        this.recommendWord = recommendWord;
         this.score = score;
+        this.wordList = wordList;
         this.standardBlank = standardBlank;
         this.userBlank = userBlank;
         this.wrongIndex = wrongIndex;
         this.status = status;
+        this.resultData = resultData;
     }
 
-    public TestDTO getRecommendSentence(){
-        return recommendSentence;
-    }
-
-    public String getRecommendWord(){
-        return recommendWord;
-    }
+    public List<String> getWordList() {return wordList;}
 
     public String getStatus(){
         return status;
@@ -54,4 +49,6 @@ public class analysisDTO {
     public List<Integer> getWrongIndex(){
         return wrongIndex;
     }
+
+    public String getResultData(){return resultData;}
 }

@@ -41,8 +41,8 @@ public class NetworkHelper {
 //        });
         retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                // .baseUrl("http://3.34.21.128:5000/")
-                .baseUrl("http://10.0.2.2:5000/")
+                .baseUrl("http://3.34.21.128:5000/")
+                // .baseUrl("http://10.0.2.2:5000/")
                 .client(httpClient.build())
                 .build();
 

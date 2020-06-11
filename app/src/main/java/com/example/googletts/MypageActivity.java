@@ -10,13 +10,15 @@ import android.view.MenuItem;
 
 import com.example.googletts.Fragment.FragmentMysentence;
 import com.example.googletts.Fragment.FragmentResult;
+import com.example.googletts.Fragment.FragmentWord;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MypageActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private FragmentResult fragmentSearch = new FragmentResult();
-    private FragmentMysentence fragmentCamera = new FragmentMysentence();
+    private FragmentResult fragmentResult = new FragmentResult();
+    private FragmentMysentence fragmentSentence = new FragmentMysentence();
+    private FragmentWord fragmentWord = new FragmentWord();
 
 
     @Override
@@ -25,7 +27,7 @@ public class MypageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mypage);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frameLayout, fragmentSearch).commitAllowingStateLoss();
+        transaction.replace(R.id.frameLayout, fragmentResult).commitAllowingStateLoss();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
@@ -39,11 +41,13 @@ public class MypageActivity extends AppCompatActivity {
             switch(menuItem.getItemId())
             {
                 case R.id.resultItem:
-                    transaction.replace(R.id.frameLayout, fragmentSearch).commitAllowingStateLoss();
-
+                    transaction.replace(R.id.frameLayout, fragmentResult).commitAllowingStateLoss();
                     break;
-                case R.id.mysentenceItem:
-                    transaction.replace(R.id.frameLayout, fragmentCamera).commitAllowingStateLoss();
+                case R.id.sentenceItem:
+                    transaction.replace(R.id.frameLayout, fragmentSentence).commitAllowingStateLoss();
+                    break;
+                case R.id.wordItem:
+                    transaction.replace(R.id.frameLayout, fragmentSentence).commitAllowingStateLoss();
                     break;
             }
             return true;

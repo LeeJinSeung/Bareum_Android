@@ -1,18 +1,22 @@
 package com.example.googletts;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
+import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.NetworkHelper;
 
@@ -28,10 +32,16 @@ public class UserSentenceActivity extends AppCompatActivity {
 
     private ListView mListView;
     private Button mButton;
+    private Button mButton2;
     private List<TestDTO> sentenceDTO;
     private ArrayList<String> items;
     private ArrayAdapter adapter;
-    private String delResult;
+
+    private ArrayList<TestDTO> sentence;
+    private int REQUEST_INSERT = 1;
+    private int REQUEST_DELETE = 2;
+
+    private ResultDTO result;
 
 
     @Override
@@ -44,6 +54,9 @@ public class UserSentenceActivity extends AppCompatActivity {
         sentenceDTO = new ArrayList();
         items = new ArrayList<String>();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+
+        sentence = new ArrayList<>();
+        mButton2 = findViewById(R.id.button3);
 
         mListView.setAdapter((adapter));
 
@@ -63,6 +76,112 @@ public class UserSentenceActivity extends AppCompatActivity {
                 createTextView();
             }
         });
+
+        mButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NetworkHelper networkHelper = new NetworkHelper();
+                Call<ResultDTO> call = networkHelper.getApiService().requestTotal();
+                call.enqueue(new Callback<ResultDTO>() {
+                    @Override
+                    public void onResponse(Call<ResultDTO> call, Response<ResultDTO> response) {
+                        Log.e("Request : ", "success " + response.isSuccessful());
+                        Log.e("Request code", Integer.toString(response.code()));
+                        if (!response.isSuccessful()) {
+                            try {
+                                Log.e("Request Message", response.errorBody().string());
+                            } catch (IOException e) {
+                                Log.e("Request IOException", "fuck");
+                            }
+                            return;
+                        }
+                        result = response.body();
+
+                        Log.e("Request phoneme: ", result.getMostPhoneme().toString());
+                        Log.e("Request score: ", result.getScore().toString());
+
+                        Intent intent = new Intent(UserSentenceActivity.this, ResultActivity.class);
+                        intent.putExtra("result", result);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResultDTO> call, Throwable t) {
+                        Log.e("Request : ", "fail " + t.getCause());
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.action_settings1:
+                // 문장 추가 하는 텍스트
+                Toast.makeText(getApplicationContext(), "문장추가 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                Intent intent1 = new Intent(UserSentenceActivity.this, AddSentenceActivity.class);
+                startActivityForResult(intent1, REQUEST_INSERT);
+                return true;
+
+            case R.id.action_settings2:
+                // 문장 삭제 체크리스트 활성화
+                Toast.makeText(getApplicationContext(), "문장삭제 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                Intent intent2 = new Intent(UserSentenceActivity.this, DeleteSentenceActivity.class);
+                intent2.putExtra("sentence", sentence);
+                startActivityForResult(intent2, REQUEST_DELETE);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_DELETE) {
+            if (resultCode == RESULT_OK) {
+                // Toast.makeText(UserSentenceActivity.this, "Result: " + data.toString(), Toast.LENGTH_SHORT).show();
+                Log.e("result : ", data.toString());
+                // Intent intent = getIntent();
+                ArrayList<Integer> deleteSentence = (ArrayList<Integer>) data.getSerializableExtra("index");
+                Log.e("idx", deleteSentence.toString());
+                for(int i=0;i<deleteSentence.size();i++) {
+                    Log.e("index", deleteSentence.get(i).toString());
+                    items.remove(deleteSentence.get(i).intValue());
+                    sentenceDTO.remove(deleteSentence.get(i).intValue());
+                }
+                Log.e("item remove?", Integer.toString(items.size()));
+                for(int i=10-deleteSentence.size(); i<10 && i<sentenceDTO.size(); i++) {
+                    items.add(sentenceDTO.get(i).getSentence());
+                }
+
+                adapter.notifyDataSetChanged();
+
+            } else {   // RESULT_CANCEL
+                Toast.makeText(UserSentenceActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if(requestCode == REQUEST_INSERT) {
+            if (resultCode == RESULT_OK) {
+                Log.e("insert sentence", "success");
+                removeTextView();
+                sentenceDTO = (ArrayList<TestDTO>) data.getSerializableExtra("sentence");
+                createTextView();
+            }
+        }
     }
 
     public void requestSentence() {
@@ -82,7 +201,9 @@ public class UserSentenceActivity extends AppCompatActivity {
                     }
                     return;
                 }
+
                 sentenceDTO = response.body();
+                sentence = (ArrayList<TestDTO>) sentenceDTO;
                 Log.e("Request Success: ", sentenceDTO.toString());
                 createTextView();
             }
@@ -96,47 +217,16 @@ public class UserSentenceActivity extends AppCompatActivity {
     }
 
     public void createTextView() {
-        for(int i=0; i<5 && i<sentenceDTO.size(); i++) {
+        for(int i=0; i<10 && i<sentenceDTO.size(); i++) {
             items.add(sentenceDTO.get(i).getSentence());
         }
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NetworkHelper networkHelper = new NetworkHelper();
-                int sid = sentenceDTO.get(position).getSid();
-                ArrayList<Integer> arrayList = new ArrayList<>();
-                // arrayList.add(sentenceDTO.get(position).getSid());
-                arrayList.add(38);
-                arrayList.add(39);
-                Log.e("arraylist", arrayList.toString());
-                Call<String> call = networkHelper.getApiService().postDeleteSentaence(arrayList);
-                Log.e("sid", Integer.toString(sid));
-                Log.e("Request : ", "sentence hihihihihii ");
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (!response.isSuccessful()) {
-                            try {
-                                Log.e("Request Message", response.errorBody().string());
-                            } catch (IOException e) {
-                                Log.e("Request IOException", "fuck");
-                            }
-                            return;
-                        }
-                        delResult = response.body();
-                        Log.e("response", "OK");
-
-                        if(delResult.contains("delSentenceControl success")) {
-                            // success
-                            Log.e("delete", "success");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Log.e("Request : ", "fail " + t.getCause());
-                    }
-                });
+                //TODO: 발음평가로 이동
+                Intent intent = new Intent(UserSentenceActivity.this, EvaluationActivity.class);
+                intent.putExtra("sentence", sentenceDTO.get(position));
+                startActivity(intent);
             }
         });
 

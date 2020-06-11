@@ -50,7 +50,7 @@ public class ResultActivity extends AppCompatActivity {
         } else {
 
             ArrayList<Entry> values = new ArrayList<>();
-
+            Log.e("score", result.getScore().toString());
             for (int i = 0; i < 5; i++) {
                 float val = result.getScore().get(i);
                 values.add(new Entry(i + 1, val));

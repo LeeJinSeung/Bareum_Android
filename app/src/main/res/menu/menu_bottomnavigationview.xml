@@ -5,7 +5,11 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="Result" />
     <item
-        android:id="@+id/mysentenceItem"
+        android:id="@+id/sentenceItem"
         android:icon="@android:drawable/ic_menu_camera"
-        android:title="Mypage" />
+        android:title="Sentence" />
+    <item
+        android:id="@+id/wordItem"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="Word" />
 </menu>
