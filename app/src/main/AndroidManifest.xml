@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddSentenceActivity"></activity>
+        <activity android:name=".WordbookActivity"/>
+        <activity android:name=".DeleteWordActivity"/>
+        <activity android:name=".AddWordActivity"/>
+        <activity android:name=".AddSentenceActivity"/>
         <activity android:name=".DeleteSentenceActivity" />
         <activity android:name=".UserSentenceActivity" />
         <activity android:name=".ResultActivity" />

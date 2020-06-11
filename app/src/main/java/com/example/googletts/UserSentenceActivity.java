@@ -50,7 +50,7 @@ public class UserSentenceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_sentence);
 
         mListView = findViewById(R.id.listView);
-        mButton = findViewById(R.id.button);
+        mButton = findViewById(R.id.nextWord);
         sentenceDTO = new ArrayList();
         items = new ArrayList<String>();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);

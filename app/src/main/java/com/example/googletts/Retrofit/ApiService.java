@@ -4,11 +4,11 @@ import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
 import com.example.googletts.Retrofit.DTO.TestDTO;
+import com.example.googletts.Retrofit.DTO.WordBookDTO;
 import com.example.googletts.Retrofit.DTO.analysisDTO;
 import com.example.googletts.Retrofit.DTO.messageDTO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -50,7 +50,14 @@ public interface ApiService<Int> {
     @POST("/getResult")
     Call<analysisDTO> requestResult(@Part MultipartBody.Part file, @Part("fileName") RequestBody name, @Part("sentenceId") RequestBody sid);
 
-    @Multipart
+    @GET("/getWordBook")
+    Call<List<WordBookDTO>> requestWordBook();
+
+    @FormUrlEncoded
     @POST("/insertWordBook")
-    Call<ResponseBody> insertWordBook(@Part("wordData") RequestBody wordData);
+    Call<messageDTO> insertWordBook(@Field("sentenceData") String sentence);
+
+    @FormUrlEncoded
+    @POST("/deleteWordBook")
+    Call<messageDTO> deleteWordBook(@Field("sentenceId") ArrayList<Integer> list);
 }

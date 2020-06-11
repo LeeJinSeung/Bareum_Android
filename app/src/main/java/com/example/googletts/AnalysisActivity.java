@@ -201,9 +201,7 @@ public class AnalysisActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 단어장에 단어 추가
-                                RequestBody wordData = RequestBody.create(MediaType.parse("text/plain"), parent.getItemAtPosition(position).toString());
-
-                                Call call = networkHelper.getApiService().insertWordBook(wordData);
+                                Call<messageDTO> call = networkHelper.getApiService().insertWordBook(parent.getItemAtPosition(position).toString());
 
                                 call.enqueue(new Callback<messageDTO>() {
                                     @Override
