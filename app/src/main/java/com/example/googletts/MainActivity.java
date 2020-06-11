@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                         sentence = response.body();
                         Log.e("Request Success: ", sentence.toString());
+
+                        Intent intent = new Intent(MainActivity.this, SentenceActivity.class);
+                        intent.putExtra("sentence", (Serializable) sentence);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -86,9 +90,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Request : ", "fail " + t.getCause());
                     }
                 });
-                Intent intent = new Intent(MainActivity.this, SentenceActivity.class);
-                intent.putExtra("sentence", (Serializable) sentence);
-                startActivity(intent);
+
             }
         });
 
@@ -127,12 +129,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Request : ", "fail " + t.getCause());
                     }
                 });
-<<<<<<< HEAD
-                Intent intent = new Intent(MainActivity.this, WordbookActivity.class);
-                startActivity(intent);
-=======
-
->>>>>>> 31713578d750cba8319dd4d46c0412030ed5a7b6
             }
         });
 

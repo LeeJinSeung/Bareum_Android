@@ -10,15 +10,38 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:drawSelectorOnTop="false"
-        android:layout_weight="0.8"/>
+        android:layout_height="590dp"
+        android:layout_weight="0.8"
+        android:drawSelectorOnTop="false">
 
-    <Button
-        android:id="@+id/nextWord"
+    </ListView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:text="다음문장" />
+        android:layout_height="140dp"
+        android:layout_weight="0.8">
+
+        <ImageButton
+            android:id="@+id/imgbtn_prev"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:background="#00000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/prev"
+            tools:layout_editor_absoluteY="12dp" />
+
+        <ImageButton
+            android:id="@+id/imgbtn_next"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:background="#00000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/next"
+            tools:layout_editor_absoluteY="12dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
