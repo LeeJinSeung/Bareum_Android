@@ -100,7 +100,7 @@ public class DeleteSentenceActivity extends AppCompatActivity {
                 Log.e("idx", delIdx.toString());
 
                 NetworkHelper networkHelper = new NetworkHelper();
-                Call<messageDTO> call = networkHelper.getApiService().postDeleteSentaence(selectedItems);
+                Call<messageDTO> call = networkHelper.getApiService().deleteSentaence(selectedItems);
 
                 call.enqueue(new Callback<messageDTO>() {
                     @Override

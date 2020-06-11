@@ -55,7 +55,7 @@ public class AddSentenceActivity extends AppCompatActivity {
                 String sentence = editText.getText().toString();
 
                 NetworkHelper networkHelper = new NetworkHelper();
-                Call<messageDTO> call = networkHelper.getApiService().postInsertSentaence(sentence);
+                Call<messageDTO> call = networkHelper.getApiService().insertSentaence(sentence);
 
                 call.enqueue(new Callback<messageDTO>() {
                     @Override

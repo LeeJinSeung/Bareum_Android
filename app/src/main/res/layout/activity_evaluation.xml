@@ -39,6 +39,71 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.96" />
+<<<<<<< HEAD
+=======
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="371dp"
+            android:layout_height="175dp"
+            android:background="@drawable/border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.158">
+
+            <ImageButton
+                android:id="@+id/imgbtn_speaker"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginBottom="68dp"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/speaker" />
+
+            <TextView
+                android:id="@+id/sampleText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:text="표준 발음"
+                app:layout_constraintBottom_toTopOf="@+id/result"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.098"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sentenceData"
+                app:layout_constraintVertical_bias="0.558" />
+
+            <TextView
+                android:id="@+id/standard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="안녕하세요"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.101"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sampleText1"
+                app:layout_constraintVertical_bias="0.269" />
+
+            <TextView
+                android:id="@+id/sentenceData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주어진 문장"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.102"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.192" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <![CDATA[
+>>>>>>> 2ccef6ee94b20a26402cd8cd4602a1f5079f4962
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="371dp"

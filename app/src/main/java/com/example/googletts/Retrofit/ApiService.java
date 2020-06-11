@@ -17,14 +17,12 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
-import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.Path;
 
 public interface ApiService<Int> {
     // dummy url
@@ -34,6 +32,20 @@ public interface ApiService<Int> {
     @GET("/getSentence")
     Call<List<TestDTO>> requestSentence();
 
+    @GET("/getCustomSentence")
+    Call<List<TestDTO>> requestUserSentence();
+
+    @FormUrlEncoded
+    @POST("/insertSentence")
+    Call<messageDTO> insertSentaence(@Field("sentenceData") String sentence);
+
+    @FormUrlEncoded
+    @POST("/deleteSentence")
+    Call<messageDTO> deleteSentaence(@Field("sentenceId") ArrayList<Integer> list);
+
+    @GET("/getTotal")
+    Call<ResultDTO> requestTotal();
+
     @Multipart
     @POST("/getResult")
     Call<analysisDTO> requestResult(@Part MultipartBody.Part file, @Part("fileName") RequestBody name, @Part("sentenceId") RequestBody sid);
@@ -41,19 +53,4 @@ public interface ApiService<Int> {
     @Multipart
     @POST("/insertWordBook")
     Call<ResponseBody> insertWordBook(@Part("wordData") RequestBody wordData);
-
-    @GET("/getTotal")
-    Call<ResultDTO> requestTotal();
-
-    @GET("/getCustomSentence")
-    Call<List<TestDTO>> requestUserSentence();
-
-    @FormUrlEncoded
-    @POST("/insertSentence")
-    Call<messageDTO> postInsertSentaence(@Field("sentenceData") String sentence);
-
-    @FormUrlEncoded
-    @POST("/deleteSentence")
-    Call<messageDTO> postDeleteSentaence(@Field("sentenceId") ArrayList<Integer> list);
-
 }
