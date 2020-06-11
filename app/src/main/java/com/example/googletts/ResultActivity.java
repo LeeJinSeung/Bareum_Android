@@ -5,10 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -47,8 +43,6 @@ public class ResultActivity extends AppCompatActivity {
     private TableLayout mtableLayout;
     private List<TestDTO> sentence;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +52,6 @@ public class ResultActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         result = (ResultDTO) intent.getSerializableExtra("result");
-
-
 
         if (result.getScore().size() < 5) {
             Log.e("not 5 ", "score");
@@ -74,7 +66,6 @@ public class ResultActivity extends AppCompatActivity {
 
             LineDataSet set1;
             set1 = new LineDataSet(values, "최근 발음 평가 점수");
-            set1.setColor(ContextCompat.getColor(chart.getContext(), R.color.colorMain));
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1); // add the data sets
@@ -143,6 +134,26 @@ public class ResultActivity extends AppCompatActivity {
         }
         else {
         }
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationView);
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.resultItem:
+                        break;
+                    case R.id.sentenceItem:
+                        Intent intentSentence = new Intent(ResultActivity.this, UserSentenceActivity.class);
+                        startActivity(intentSentence);
+                        break;
+                    case R.id.wordbookItem:
+                        Intent intentWordBook = new Intent(ResultActivity.this, WordbookActivity.class);
+                        startActivity(intentWordBook);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 }
 

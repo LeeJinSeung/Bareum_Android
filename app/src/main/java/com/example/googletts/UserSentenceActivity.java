@@ -4,10 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,26 +45,66 @@ public class UserSentenceActivity extends AppCompatActivity {
 
     private ResultDTO result;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_sentence);
 
-        Intent intent = getIntent();
         mListView = findViewById(R.id.listView);
         sentenceDTO = new ArrayList();
         items = new ArrayList<String>();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
 
-        sentence = (List<TestDTO>) intent.getSerializableExtra("sentence");
-
         mListView.setAdapter(adapter);
+        requestSentence();
 
-        createTextView();
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationView);
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.resultItem:
+                        NetworkHelper networkHelper = new NetworkHelper();
+                        Call<ResultDTO> call = networkHelper.getApiService().requestTotal();
+                        call.enqueue(new Callback<ResultDTO>() {
+                            @Override
+                            public void onResponse(Call<ResultDTO> call, Response<ResultDTO> response) {
+                                Log.e("Request : ", "success " + response.isSuccessful());
+                                Log.e("Request code", Integer.toString(response.code()));
+                                if (!response.isSuccessful()) {
+                                    try {
+                                        Log.e("Request Message", response.errorBody().string());
+                                    } catch (IOException e) {
+                                        Log.e("Request IOException", "fuck");
+                                    }
+                                    return;
+                                }
+                                result = response.body();
 
+                                Log.e("Request phoneme: ", result.getMostPhoneme().toString());
+                                Log.e("Request score: ", result.getScore().toString());
+
+                                Intent intentResult = new Intent(UserSentenceActivity.this, ResultActivity.class);
+                                intentResult.putExtra("result", result);
+                                startActivity(intentResult);
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResultDTO> call, Throwable t) {
+                                Log.e("Request : ", "fail " + t.getCause());
+                            }
+                        });
+                        break;
+                    case R.id.sentenceItem:
+                        break;
+                    case R.id.wordbookItem:
+                        Intent intentWordBook = new Intent(UserSentenceActivity.this, WordbookActivity.class);
+                        startActivity(intentWordBook);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
