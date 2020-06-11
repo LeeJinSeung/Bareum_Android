@@ -42,9 +42,9 @@ public class SentenceActivity extends AppCompatActivity {
         // mLinearLayout = findViewById(R.id.linearLayout);
         Intent intent = getIntent();
         mListView = findViewById(R.id.listView);
-        mButton = findViewById(R.id.button);
         sentence = (List<TestDTO>) intent.getSerializableExtra("sentence");
         items = new ArrayList<>();
+        mButton = findViewById(R.id.nextWord);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
 
         mListView.setAdapter((adapter));
