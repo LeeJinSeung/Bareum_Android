@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">한발짝</string>
+<<<<<<< HEAD
     <string name="warning1">1. 띄어쓰기에 유의하여 읽어주세요.</string>
     <string name="warning2">2. 최대한 잡음이 없는 곳에서 해주세요.</string>
+=======
+    <string name="title_result">종합결과</string>
+    <string name="title_sentence">사용자문장</string>
+    <string name="title_word">단어장</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_mypage">MypageActivity</string>
+>>>>>>> 31713578d750cba8319dd4d46c0412030ed5a7b6
 </resources>

@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,9 +19,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.googletts.Fragment.FragmentMysentence;
-import com.example.googletts.Fragment.FragmentResult;
 import com.example.googletts.Retrofit.DTO.ResultDTO;
+import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -27,7 +30,14 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ResultActivity extends AppCompatActivity {
@@ -35,6 +45,9 @@ public class ResultActivity extends AppCompatActivity {
     private LineChart chart;
     private ResultDTO result;
     private TableLayout mtableLayout;
+    private List<TestDTO> sentence;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +58,8 @@ public class ResultActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         result = (ResultDTO) intent.getSerializableExtra("result");
+
+
 
         if (result.getScore().size() < 5) {
             Log.e("not 5 ", "score");
@@ -125,8 +140,8 @@ public class ResultActivity extends AppCompatActivity {
                 newTr.addView(newPhoTv);
                 mtableLayout.addView(newTr);
             }
-        } else {
-
+        }
+        else {
         }
     }
 }

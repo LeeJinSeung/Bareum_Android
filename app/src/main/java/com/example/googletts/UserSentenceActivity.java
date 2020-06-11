@@ -1,6 +1,13 @@
 package com.example.googletts;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +22,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-
 import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.NetworkHelper;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,17 +39,17 @@ import retrofit2.Response;
 public class UserSentenceActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private Button mButton;
-    private Button mButton2;
     private List<TestDTO> sentenceDTO;
     private ArrayList<String> items;
     private ArrayAdapter adapter;
 
-    private ArrayList<TestDTO> sentence;
+    private List<TestDTO> sentence;
     private int REQUEST_INSERT = 1;
     private int REQUEST_DELETE = 2;
 
     private ResultDTO result;
+
+
 
 
     @Override
@@ -49,69 +57,18 @@ public class UserSentenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_sentence);
 
+        Intent intent = getIntent();
         mListView = findViewById(R.id.listView);
-        mButton = findViewById(R.id.nextWord);
         sentenceDTO = new ArrayList();
         items = new ArrayList<String>();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
 
-        sentence = new ArrayList<>();
-        mButton2 = findViewById(R.id.button3);
+        sentence = (List<TestDTO>) intent.getSerializableExtra("sentence");
 
-        mListView.setAdapter((adapter));
+        mListView.setAdapter(adapter);
 
-        Log.e("this activity: ","SentenceActivity open");
+        createTextView();
 
-        requestSentence();
-        Log.e("sentenceDTO size : ",Integer.toString(sentenceDTO.size()));
-
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeTextView();
-                Log.e("sentenceDTO size : ",Integer.toString(sentenceDTO.size()));
-                if(sentenceDTO.size() == 0) {
-                    requestSentence();
-                }
-                createTextView();
-            }
-        });
-
-        mButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NetworkHelper networkHelper = new NetworkHelper();
-                Call<ResultDTO> call = networkHelper.getApiService().requestTotal();
-                call.enqueue(new Callback<ResultDTO>() {
-                    @Override
-                    public void onResponse(Call<ResultDTO> call, Response<ResultDTO> response) {
-                        Log.e("Request : ", "success " + response.isSuccessful());
-                        Log.e("Request code", Integer.toString(response.code()));
-                        if (!response.isSuccessful()) {
-                            try {
-                                Log.e("Request Message", response.errorBody().string());
-                            } catch (IOException e) {
-                                Log.e("Request IOException", "fuck");
-                            }
-                            return;
-                        }
-                        result = response.body();
-
-                        Log.e("Request phoneme: ", result.getMostPhoneme().toString());
-                        Log.e("Request score: ", result.getScore().toString());
-
-                        Intent intent = new Intent(UserSentenceActivity.this, ResultActivity.class);
-                        intent.putExtra("result", result);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResultDTO> call, Throwable t) {
-                        Log.e("Request : ", "fail " + t.getCause());
-                    }
-                });
-            }
-        });
     }
 
     @Override
@@ -137,7 +94,7 @@ public class UserSentenceActivity extends AppCompatActivity {
                 // 문장 삭제 체크리스트 활성화
                 Toast.makeText(getApplicationContext(), "문장삭제 버튼 클릭됨", Toast.LENGTH_LONG).show();
                 Intent intent2 = new Intent(UserSentenceActivity.this, DeleteSentenceActivity.class);
-                intent2.putExtra("sentence", sentence);
+                intent2.putExtra("sentence", (Serializable) sentence);
                 startActivityForResult(intent2, REQUEST_DELETE);
                 return true;
 
