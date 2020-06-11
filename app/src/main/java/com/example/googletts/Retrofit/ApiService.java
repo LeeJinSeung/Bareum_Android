@@ -21,6 +21,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 public interface ApiService {
     // dummy url
@@ -30,12 +31,12 @@ public interface ApiService {
     @GET("/getSentence")
     Call<List<TestDTO>> requestSentence();
 
+    @GET("/getTotal")
+    Call<ResultDTO> requestTotal();
+
     @Multipart
     @POST("/getResult")
     Call<analysisDTO> requestResult(@Part MultipartBody.Part file, @Part("fileName") RequestBody name, @Part("sentenceId") RequestBody sid);
-
-    @GET("/getTotal")
-    Call<ResultDTO> requestTotal();
 
     @Multipart
     @POST("/insertWordBook")
