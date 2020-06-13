@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.TestDTO;
+import com.example.googletts.Retrofit.DTO.WordBookDTO;
+import com.example.googletts.Retrofit.NetworkHelper;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -41,7 +43,8 @@ public class ResultActivity extends AppCompatActivity {
     private LineChart chart;
     private ResultDTO result;
     private TableLayout mtableLayout;
-    private List<TestDTO> sentence;
+    private List<TestDTO> userSentence;
+    private List<WordBookDTO> wordbookDTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +139,7 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationView);
+        navigation.setSelectedItemId(R.id.resultItem);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -143,12 +147,73 @@ public class ResultActivity extends AppCompatActivity {
                     case R.id.resultItem:
                         break;
                     case R.id.sentenceItem:
-                        Intent intentSentence = new Intent(ResultActivity.this, UserSentenceActivity.class);
-                        startActivity(intentSentence);
+                        NetworkHelper networkHelper1 = new NetworkHelper();
+                        Call<List<TestDTO>> call1 = networkHelper1.getApiService().requestUserSentence();
+                        Log.e("Request : ", "sentence hihihihihii ");
+                        call1.enqueue(new Callback<List<TestDTO>>() {
+                            @Override
+                            public void onResponse(Call<List<TestDTO>> call1, Response<List<TestDTO>> response) {
+                                Log.e("Request : ", "success " + response.isSuccessful());
+                                Log.e("Request code", Integer.toString(response.code()));
+                                if (!response.isSuccessful()) {
+                                    try {
+                                        Log.e("Request Message", response.errorBody().string());
+                                    } catch (IOException e) {
+                                        Log.e("Request IOException", "fuck");
+                                    }
+                                    return;
+                                }
+
+                                userSentence = response.body();
+                                Log.e("Request Success: ", userSentence.toString());
+
+                                Intent intentSentence = new Intent(ResultActivity.this, UserSentenceActivity.class);
+                                intentSentence.putExtra("sentence", (Serializable) userSentence);
+                                startActivity(intentSentence);
+                                finish();
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<TestDTO>> call1, Throwable t) {
+                                Log.e("Request : ", "fail " + t.getCause());
+                            }
+                        });
+
+
                         break;
                     case R.id.wordbookItem:
-                        Intent intentWordBook = new Intent(ResultActivity.this, WordbookActivity.class);
-                        startActivity(intentWordBook);
+                        NetworkHelper networkHelper = new NetworkHelper();
+                        Call<List<WordBookDTO>> call = networkHelper.getApiService().requestWordBook();
+                        call.enqueue(new Callback<List<WordBookDTO>>() {
+                            @Override
+                            public void onResponse(Call<List<WordBookDTO>> call, Response<List<WordBookDTO>> response) {
+                                Log.e("Request : ", "success " + response.isSuccessful());
+                                Log.e("Request code", Integer.toString(response.code()));
+                                if (!response.isSuccessful()) {
+                                    try {
+                                        Log.e("Request Message", response.errorBody().string());
+                                    } catch (IOException e) {
+                                        Log.e("Request IOException", "fuck");
+                                    }
+                                    return;
+                                }
+
+                                wordbookDTO = response.body();
+                                Log.e("Request Success: ", wordbookDTO.toString());
+                                Intent intentWordBook = new Intent(ResultActivity.this, WordbookActivity.class);
+                                intentWordBook.putExtra("word", (Serializable) wordbookDTO);
+                                startActivity(intentWordBook);
+                                finish();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<WordBookDTO>> call, Throwable t) {
+                                Log.e("Request : ", "fail " + t.getCause());
+                            }
+                        });
+
+
                         break;
                 }
                 return false;

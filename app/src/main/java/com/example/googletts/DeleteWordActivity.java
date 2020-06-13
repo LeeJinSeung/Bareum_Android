@@ -37,7 +37,7 @@ public class DeleteWordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delete_sentence);
+        setContentView(R.layout.activity_delete_word);
 
         listview = (ListView)findViewById(R.id.listview);
 

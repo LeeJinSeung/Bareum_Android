@@ -1,5 +1,6 @@
 package com.example.googletts.Retrofit;
 
+import com.example.googletts.Retrofit.DTO.InsertWordDTO;
 import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
@@ -55,7 +56,7 @@ public interface ApiService<Int> {
 
     @FormUrlEncoded
     @POST("/insertWordBook")
-    Call<messageDTO> insertWordBook(@Field("wordData") String sentence);
+    Call<InsertWordDTO> insertWordBook(@Field("wordData") String sentence);
 
     @FormUrlEncoded
     @POST("/deleteWordBook")

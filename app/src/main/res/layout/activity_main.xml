@@ -11,12 +11,12 @@
         android:id="@+id/constraintLayout3"
         android:layout_width="230dp"
         android:layout_height="215dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="68dp"
         android:background="@drawable/border"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/editText"
@@ -87,19 +87,5 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/gyeonggy"
-        android:text="한 발 짝"
-        android:textColor="#1e90ff"
-        android:textSize="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.475"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

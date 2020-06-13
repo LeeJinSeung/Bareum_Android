@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Request phoneme: ", result.getMostPhoneme().toString());
                         Log.e("Request score: ", result.getScore().toString());
 
-                         Intent intent = new Intent(MainActivity.this, UserSentenceActivity.class);
-//                         intent.putExtra("result", result);
+                         Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                         intent.putExtra("result", result);
                          startActivity(intent);
                     }
 

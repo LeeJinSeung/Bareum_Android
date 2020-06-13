@@ -15,11 +15,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.TestDTO;
+import com.example.googletts.Retrofit.DTO.WordBookDTO;
 import com.example.googletts.Retrofit.NetworkHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -38,10 +40,14 @@ public class UserSentenceActivity extends AppCompatActivity {
     private List<TestDTO> sentenceDTO;
     private ArrayList<String> items;
     private ArrayAdapter adapter;
+    private List<WordBookDTO> wordbookDTO;
+    private ImageButton imgbtnPrev;
+    private ImageButton imgbtnNext;
 
     private List<TestDTO> sentence;
     private int REQUEST_INSERT = 1;
     private int REQUEST_DELETE = 2;
+    private int page = 0;
 
     private ResultDTO result;
 
@@ -49,16 +55,56 @@ public class UserSentenceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_sentence);
-
+        Intent intent = getIntent();
         mListView = findViewById(R.id.listView);
-        sentenceDTO = new ArrayList();
+        sentenceDTO = (ArrayList<TestDTO>) intent.getSerializableExtra("sentence");
         items = new ArrayList<String>();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+        imgbtnNext = findViewById(R.id.imgbtn_next);
+        imgbtnPrev = findViewById(R.id.imgbtn_prev);
 
         mListView.setAdapter(adapter);
-        requestSentence();
+        createTextView();
+
+        page = page + 1;
+        imgbtnPrev.setEnabled(false);
+        if(page == (sentenceDTO.size() -1)/9 + 1) {
+            imgbtnNext.setEnabled(false);
+        }
+        else {
+            imgbtnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeTextView();
+                    page = page + 1;
+                    createTextView();
+                    if (page == (sentenceDTO.size() - 1) / 9) {
+                        imgbtnNext.setEnabled(false);
+                    }
+                    if (page > 0) {
+                        imgbtnPrev.setEnabled(true);
+                    }
+                }
+            });
+
+            imgbtnPrev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeTextView();
+                    page = page - 1;
+                    createTextView();
+                    if (page == 0) {
+                        imgbtnPrev.setEnabled(false);
+                    }
+                    if (page < (sentenceDTO.size() - 1) / 9) {
+                        imgbtnNext.setEnabled(true);
+                    }
+                }
+            });
+        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationView);
+        navigation.setSelectedItemId(R.id.sentenceItem);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -87,6 +133,8 @@ public class UserSentenceActivity extends AppCompatActivity {
                                 Intent intentResult = new Intent(UserSentenceActivity.this, ResultActivity.class);
                                 intentResult.putExtra("result", result);
                                 startActivity(intentResult);
+                                finish();
+
                             }
 
                             @Override
@@ -98,10 +146,40 @@ public class UserSentenceActivity extends AppCompatActivity {
                     case R.id.sentenceItem:
                         break;
                     case R.id.wordbookItem:
-                        Intent intentWordBook = new Intent(UserSentenceActivity.this, WordbookActivity.class);
-                        startActivity(intentWordBook);
+                        NetworkHelper networkHelper1 = new NetworkHelper();
+                        Call<List<WordBookDTO>> call1 = networkHelper1.getApiService().requestWordBook();
+                        call1.enqueue(new Callback<List<WordBookDTO>>() {
+                            @Override
+                            public void onResponse(Call<List<WordBookDTO>> call1, Response<List<WordBookDTO>> response) {
+                                Log.e("Request : ", "success " + response.isSuccessful());
+                                Log.e("Request code", Integer.toString(response.code()));
+                                if (!response.isSuccessful()) {
+                                    try {
+                                        Log.e("Request Message", response.errorBody().string());
+                                    } catch (IOException e) {
+                                        Log.e("Request IOException", "fuck");
+                                    }
+                                    return;
+                                }
+
+                                wordbookDTO = response.body();
+                                Log.e("Request Success: ", wordbookDTO.toString());
+                                Intent intentWordBook = new Intent(UserSentenceActivity.this, WordbookActivity.class);
+                                intentWordBook.putExtra("word", (Serializable) wordbookDTO);
+                                startActivity(intentWordBook);
+                                finish();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<WordBookDTO>> call1, Throwable t) {
+                                Log.e("Request : ", "fail " + t.getCause());
+                            }
+                        });
+
                         break;
                 }
+
                 return false;
             }
         });
@@ -177,40 +255,39 @@ public class UserSentenceActivity extends AppCompatActivity {
         }
     }
 
-    public void requestSentence() {
-        NetworkHelper networkHelper = new NetworkHelper();
-        Call<List<TestDTO>> call = networkHelper.getApiService().requestUserSentence();
-        Log.e("Request : ", "sentence hihihihihii ");
-        call.enqueue(new Callback<List<TestDTO>>() {
-            @Override
-            public void onResponse(Call<List<TestDTO>> call, Response<List<TestDTO>> response) {
-                Log.e("Request : ", "success " + response.isSuccessful());
-                Log.e("Request code", Integer.toString(response.code()));
-                if (!response.isSuccessful()) {
-                    try {
-                        Log.e("Request Message", response.errorBody().string());
-                    } catch (IOException e) {
-                        Log.e("Request IOException", "fuck");
-                    }
-                    return;
-                }
-
-                sentenceDTO = response.body();
-                sentence = (ArrayList<TestDTO>) sentenceDTO;
-                Log.e("Request Success: ", sentenceDTO.toString());
-                createTextView();
-            }
-
-            @Override
-            public void onFailure(Call<List<TestDTO>> call, Throwable t) {
-                Log.e("Request : ", "fail " + t.getCause());
-            }
-        });
-
-    }
+//    public void requestSentence() {
+//        NetworkHelper networkHelper = new NetworkHelper();
+//        Call<List<TestDTO>> call = networkHelper.getApiService().requestUserSentence();
+//        Log.e("Request : ", "sentence hihihihihii ");
+//        call.enqueue(new Callback<List<TestDTO>>() {
+//            @Override
+//            public void onResponse(Call<List<TestDTO>> call, Response<List<TestDTO>> response) {
+//                Log.e("Request : ", "success " + response.isSuccessful());
+//                Log.e("Request code", Integer.toString(response.code()));
+//                if (!response.isSuccessful()) {
+//                    try {
+//                        Log.e("Request Message", response.errorBody().string());
+//                    } catch (IOException e) {
+//                        Log.e("Request IOException", "fuck");
+//                    }
+//                    return;
+//                }
+//
+//                sentenceDTO = response.body();
+//                Log.e("Request Success: ", sentenceDTO.toString());
+//                createTextView();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<TestDTO>> call, Throwable t) {
+//                Log.e("Request : ", "fail " + t.getCause());
+//            }
+//        });
+//
+//    }
 
     public void createTextView() {
-        for(int i=0; i<10 && i<sentenceDTO.size(); i++) {
+        for(int i=page*9; i<9*page + 9 && i<sentenceDTO.size(); i++) {
             items.add(sentenceDTO.get(i).getSentence());
         }
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -232,7 +309,6 @@ public class UserSentenceActivity extends AppCompatActivity {
 
         for(int i=0;i<count;i++) {
             items.remove(0);
-            sentenceDTO.remove(0);
         }
         adapter.notifyDataSetChanged();
     }

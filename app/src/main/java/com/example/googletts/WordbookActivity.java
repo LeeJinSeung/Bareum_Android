@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,10 +14,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.example.googletts.Retrofit.DTO.InsertWordDTO;
 import com.example.googletts.Retrofit.DTO.ResultDTO;
 import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.DTO.WordBookDTO;
@@ -24,6 +27,7 @@ import com.example.googletts.Retrofit.NetworkHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,89 +38,84 @@ import retrofit2.Response;
 public class WordbookActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private Button mButton;
-    private Button mButton2;
     private List<WordBookDTO> wordbookDTO;
     private ArrayList<String> items;
     private ArrayAdapter adapter;
+    private InsertWordDTO newWord;
+    private ImageButton imgbtnPrev;
+    private ImageButton imgbtnNext;
+    private List<TestDTO> userSentence;
 
-    private ArrayList<WordBookDTO> words;
+    private ArrayList<WordBookDTO> words; // 원래 문장
     private int REQUEST_INSERT = 1;
     private int REQUEST_DELETE = 2;
 
     private ResultDTO result;
+    private int page = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wordbook);
-
+        Intent intent = getIntent();
         mListView = findViewById(R.id.listView);
-        mButton = findViewById(R.id.nextWord);
-        wordbookDTO = new ArrayList();
+        imgbtnNext = findViewById(R.id.imgbtn_next);
+        imgbtnPrev = findViewById(R.id.imgbtn_prev);
+
+        words = new ArrayList();
         items = new ArrayList<String>();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
 
-        words = new ArrayList<>();
-        mButton2 = findViewById(R.id.button3);
+        wordbookDTO = (List<WordBookDTO>) intent.getSerializableExtra("word");
+        newWord = new InsertWordDTO();
 
         mListView.setAdapter((adapter));
 
         Log.e("this activity: ","WordBookActivity open");
 
-        requestWordBook();
         Log.e("WordBookDTO size : ",Integer.toString(wordbookDTO.size()));
 
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeTextView();
-                Log.e("WordBookDTO size : ",Integer.toString(wordbookDTO.size()));
-                if(wordbookDTO.size() == 0) {
-                    requestWordBook();
+        createTextView();
+        page = page + 1;
+        imgbtnPrev.setEnabled(false);
+        if(page == (wordbookDTO.size() -1)/9 + 1) {
+            imgbtnNext.setEnabled(false);
+        }
+        else {
+            imgbtnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeTextView();
+                    page = page + 1;
+                    createTextView();
+                    if (page == (wordbookDTO.size() - 1) / 9) {
+                        imgbtnNext.setEnabled(false);
+                    }
+                    if (page > 0) {
+                        imgbtnPrev.setEnabled(true);
+                    }
                 }
-                createTextView();
-            }
-        });
+            });
 
-        mButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NetworkHelper networkHelper = new NetworkHelper();
-                Call<ResultDTO> call = networkHelper.getApiService().requestTotal();
-                call.enqueue(new Callback<ResultDTO>() {
-                    @Override
-                    public void onResponse(Call<ResultDTO> call, Response<ResultDTO> response) {
-                        Log.e("Request : ", "success " + response.isSuccessful());
-                        Log.e("Request code", Integer.toString(response.code()));
-                        if (!response.isSuccessful()) {
-                            try {
-                                Log.e("Request Message", response.errorBody().string());
-                            } catch (IOException e) {
-                                Log.e("Request IOException", "fuck");
-                            }
-                            return;
-                        }
-                        result = response.body();
-
-                        Log.e("Request phoneme: ", result.getMostPhoneme().toString());
-                        Log.e("Request score: ", result.getScore().toString());
-
-                        Intent intent = new Intent(WordbookActivity.this, ResultActivity.class);
-                        intent.putExtra("result", result);
-                        startActivity(intent);
+            imgbtnPrev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeTextView();
+                    page = page - 1;
+                    createTextView();
+                    if (page == 0) {
+                        imgbtnPrev.setEnabled(false);
                     }
-
-                    @Override
-                    public void onFailure(Call<ResultDTO> call, Throwable t) {
-                        Log.e("Request : ", "fail " + t.getCause());
+                    if (page < (wordbookDTO.size() - 1) / 9) {
+                        imgbtnNext.setEnabled(true);
                     }
-                });
-            }
-        });
+                }
+            });
+        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigationView);
+        navigation.setSelectedItemId(R.id.wordbookItem);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -145,6 +144,8 @@ public class WordbookActivity extends AppCompatActivity {
                                 Intent intentResult = new Intent(WordbookActivity.this, ResultActivity.class);
                                 intentResult.putExtra("result", result);
                                 startActivity(intentResult);
+                                finish();
+
                             }
 
                             @Override
@@ -154,8 +155,38 @@ public class WordbookActivity extends AppCompatActivity {
                         });
                         break;
                     case R.id.sentenceItem:
-                        Intent intentSentence = new Intent(WordbookActivity.this, UserSentenceActivity.class);
-                        startActivity(intentSentence);
+                        NetworkHelper networkHelper1 = new NetworkHelper();
+                        Call<List<TestDTO>> call1 = networkHelper1.getApiService().requestUserSentence();
+                        Log.e("Request : ", "sentence hihihihihii ");
+                        call1.enqueue(new Callback<List<TestDTO>>() {
+                            @Override
+                            public void onResponse(Call<List<TestDTO>> call1, Response<List<TestDTO>> response) {
+                                Log.e("Request : ", "success " + response.isSuccessful());
+                                Log.e("Request code", Integer.toString(response.code()));
+                                if (!response.isSuccessful()) {
+                                    try {
+                                        Log.e("Request Message", response.errorBody().string());
+                                    } catch (IOException e) {
+                                        Log.e("Request IOException", "fuck");
+                                    }
+                                    return;
+                                }
+
+                                userSentence = response.body();
+                                Log.e("Request Success: ", userSentence.toString());
+
+                                Intent intentSentence = new Intent(WordbookActivity.this, UserSentenceActivity.class);
+                                intentSentence.putExtra("sentence", (Serializable) userSentence);
+                                startActivity(intentSentence);
+                                finish();
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<TestDTO>> call1, Throwable t) {
+                                Log.e("Request : ", "fail " + t.getCause());
+                            }
+                        });
+
                         break;
                     case R.id.wordbookItem:
                         break;
@@ -169,7 +200,7 @@ public class WordbookActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //return super.onCreateOptionsMenu(menu);
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
+        menuInflater.inflate(R.menu.menu_word, menu);
         return true;
     }
 
@@ -227,46 +258,47 @@ public class WordbookActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Log.e("insert word", "success");
                 removeTextView();
-                wordbookDTO = (ArrayList<WordBookDTO>) data.getSerializableExtra("word");
+                newWord = (InsertWordDTO) data.getSerializableExtra("newWord");
+                wordbookDTO.add(newWord.getWord());
                 createTextView();
             }
         }
     }
 
-    // 완료
-    public void requestWordBook() {
-        NetworkHelper networkHelper = new NetworkHelper();
-        Call<List<WordBookDTO>> call = networkHelper.getApiService().requestWordBook();
-        call.enqueue(new Callback<List<WordBookDTO>>() {
-            @Override
-            public void onResponse(Call<List<WordBookDTO>> call, Response<List<WordBookDTO>> response) {
-                Log.e("Request : ", "success " + response.isSuccessful());
-                Log.e("Request code", Integer.toString(response.code()));
-                if (!response.isSuccessful()) {
-                    try {
-                        Log.e("Request Message", response.errorBody().string());
-                    } catch (IOException e) {
-                        Log.e("Request IOException", "fuck");
-                    }
-                    return;
-                }
-
-                wordbookDTO = response.body();
-                words = (ArrayList<WordBookDTO>) wordbookDTO;
-                Log.e("Request Success: ", wordbookDTO.toString());
-                createTextView();
-            }
-
-            @Override
-            public void onFailure(Call<List<WordBookDTO>> call, Throwable t) {
-                Log.e("Request : ", "fail " + t.getCause());
-            }
-        });
-    }
+//    // 완료
+//    public void requestWordBook() {
+//        NetworkHelper networkHelper = new NetworkHelper();
+//        Call<List<WordBookDTO>> call = networkHelper.getApiService().requestWordBook();
+//        call.enqueue(new Callback<List<WordBookDTO>>() {
+//            @Override
+//            public void onResponse(Call<List<WordBookDTO>> call, Response<List<WordBookDTO>> response) {
+//                Log.e("Request : ", "success " + response.isSuccessful());
+//                Log.e("Request code", Integer.toString(response.code()));
+//                if (!response.isSuccessful()) {
+//                    try {
+//                        Log.e("Request Message", response.errorBody().string());
+//                    } catch (IOException e) {
+//                        Log.e("Request IOException", "fuck");
+//                    }
+//                    return;
+//                }
+//
+//                wordbookDTO = response.body();
+//                words = (ArrayList<WordBookDTO>) wordbookDTO;
+//                Log.e("Request Success: ", wordbookDTO.toString());
+//                createTextView();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<WordBookDTO>> call, Throwable t) {
+//                Log.e("Request : ", "fail " + t.getCause());
+//            }
+//        });
+//    }
 
     // 완료
     public void createTextView() {
-        for(int i=0; i<10 && i<wordbookDTO.size(); i++) {
+        for(int i=page*9; i<page*9+9 && i<wordbookDTO.size(); i++) {
             items.add(wordbookDTO.get(i).getWordData());
         }
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -275,7 +307,7 @@ public class WordbookActivity extends AppCompatActivity {
                 // To SentenceAcitivity
                 Intent intent = new Intent(WordbookActivity.this, SentenceActivity.class);
                 //TODO 단어가 포함되어 있는 문장 리스트 (key 확인)
-                intent.putExtra("setenceList", (ArrayList)wordbookDTO.get(position).getRecommend());
+                intent.putExtra("sentence", (ArrayList)wordbookDTO.get(position).getRecommend());
                 startActivity(intent);
             }
         });
@@ -290,7 +322,6 @@ public class WordbookActivity extends AppCompatActivity {
 
         for(int i=0;i<count;i++) {
             items.remove(0);
-            wordbookDTO.remove(0);
         }
         adapter.notifyDataSetChanged();
     }
