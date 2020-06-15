@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/resultItem"
-        android:icon="@drawable/analysis"
-        android:title="Result" />
+        android:icon="@drawable/research"
+        android:title="종합 결과" />
     <item
         android:id="@+id/sentenceItem"
-        android:icon="@android:drawable/ic_menu_camera"
-        android:title="Sentence" />
+        android:icon="@drawable/book"
+        android:title="사용자 문장" />
     <item
         android:id="@+id/wordbookItem"
-        android:icon="@android:drawable/ic_menu_call"
-        android:title="WordBook" />
+        android:icon="@drawable/doc"
+        android:title="단어장" />
 </menu>

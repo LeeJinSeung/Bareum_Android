@@ -3,13 +3,17 @@ package com.example.googletts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -102,13 +106,28 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         if (result.getMostPhoneme().size() > 0) {
+            Typeface face = ResourcesCompat.getFont(mtableLayout.getContext(), R.font.ridibatang);
+
             TableRow tr = new TableRow(mtableLayout.getContext());
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
             tr.setLayoutParams(lp);
             TextView posTv = new TextView(tr.getContext());
+            posTv.setGravity(Gravity.CENTER);
             posTv.setText("위치");
+            posTv.setTypeface(face);
             TextView phoTv = new TextView(tr.getContext());
+            phoTv.setGravity(Gravity.CENTER);
+            phoTv.setTypeface(face);
             phoTv.setText("음소");
+
+            posTv.setTypeface(posTv.getTypeface(), Typeface.BOLD);
+            phoTv.setTypeface(phoTv.getTypeface(), Typeface.BOLD);
+            posTv.setTextSize(22);
+            phoTv.setTextSize(22);
+            posTv.setTextColor(Color.BLACK);
+            phoTv.setTextColor(Color.BLACK);
+            posTv.setPadding(0,10,0,10);
+            phoTv.setPadding(0,10,0,10);
             tr.addView(posTv);
             tr.addView(phoTv);
             mtableLayout.addView(tr);
@@ -119,10 +138,11 @@ public class ResultActivity extends AppCompatActivity {
                 TableRow.LayoutParams newLp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
                 newTr.setLayoutParams(newLp);
                 TextView newPosTv = new TextView(newTr.getContext());
+                newPosTv.setGravity(Gravity.CENTER);
                 ArrayList<String> phoneme = result.getMostPhoneme().get(i);
                 newPosTv.setText(phoneme.get(0));
-                newTr.addView(newPosTv);
                 TextView newPhoTv = new TextView(newTr.getContext());
+                newPhoTv.setGravity(Gravity.CENTER);
                 if (phoneme.get(1).contains("u")) {
                     newPhoTv.setText("자음");
                 } else if (phoneme.get(1).contains("m")) {
@@ -131,6 +151,16 @@ public class ResultActivity extends AppCompatActivity {
                     newPhoTv.setText("받침");
                 }
 
+                newPosTv.setTypeface(face);
+                newPhoTv.setTypeface(face);
+                newPosTv.setTextSize(18);
+                newPhoTv.setTextSize(18);
+                newPhoTv.setPadding(0,10,0,10);
+                newPosTv.setPadding(0,10,0,10);
+                newPosTv.setTextColor(Color.BLACK);
+                newPhoTv.setTextColor(Color.BLACK);
+
+                newTr.addView(newPosTv);
                 newTr.addView(newPhoTv);
                 mtableLayout.addView(newTr);
             }

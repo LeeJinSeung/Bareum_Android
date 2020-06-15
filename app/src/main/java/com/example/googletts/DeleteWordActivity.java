@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.DTO.WordBookDTO;
 import com.example.googletts.Retrofit.DTO.messageDTO;
 import com.example.googletts.Retrofit.NetworkHelper;
@@ -46,7 +45,7 @@ public class DeleteWordActivity extends AppCompatActivity {
 
         //리스트뷰와 리스트를 연결하기 위해 사용되는 어댑터
         adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_multiple_choice, list);
+                R.layout.listview_item_select, list);
         // simple_list_item_multiple_choice
 
         //리스트뷰의 어댑터를 지정해준다.

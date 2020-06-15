@@ -10,6 +10,7 @@
     android:id="@+id/edittext"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="등록할 문장을 입력해주세요."/>
+    android:hint="등록할 문장을 입력해주세요."
+    android:fontFamily="@font/ridibatang"/>
 
 </LinearLayout>

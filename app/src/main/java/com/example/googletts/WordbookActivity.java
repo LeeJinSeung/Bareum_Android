@@ -65,7 +65,7 @@ public class WordbookActivity extends AppCompatActivity {
 
         words = new ArrayList();
         items = new ArrayList<String>();
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+        adapter = new ArrayAdapter(this, R.layout.listview_item, items);
 
         wordbookDTO = (List<WordBookDTO>) intent.getSerializableExtra("word");
         newWord = new InsertWordDTO();
