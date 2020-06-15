@@ -10,6 +10,6 @@
         android:title="사용자문장" />
     <item
         android:id="@+id/wordbookItem"
-        android:icon="@android:drawable/ic_menu_call"
+        android:icon="@drawable/doc"
         android:title="단어장" />
 </menu>

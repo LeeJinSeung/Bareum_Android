@@ -82,7 +82,7 @@ public class AnalysisActivity extends AppCompatActivity {
         final SpannableStringBuilder sp = new SpannableStringBuilder(resultData);
 
         ArrayList<String> items = new ArrayList<String>();
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+        adapter = new ArrayAdapter(this, R.layout.listview_item, items);
 
         if(status.equals("success")){
             wordList = intent.getExtras().getStringArrayList("wordList");

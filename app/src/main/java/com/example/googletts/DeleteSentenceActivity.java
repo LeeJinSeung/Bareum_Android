@@ -48,8 +48,7 @@ public class DeleteSentenceActivity extends AppCompatActivity {
         list = new ArrayList<>();
 
         //리스트뷰와 리스트를 연결하기 위해 사용되는 어댑터
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_multiple_choice, list);
+        adapter = new ArrayAdapter<>(this, R.layout.listview_item_select, list);
         // simple_list_item_multiple_choice
 
         //리스트뷰의 어댑터를 지정해준다.

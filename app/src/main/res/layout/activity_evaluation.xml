@@ -16,50 +16,50 @@
 
         <ImageButton
             android:id="@+id/imgbtn_mic"
-            android:layout_width="100dp"
-            android:layout_height="71dp"
+            android:layout_width="81dp"
+            android:layout_height="58dp"
             android:background="#00000000"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.115"
+            app:layout_constraintHorizontal_bias="0.087"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.948"
+            app:layout_constraintVertical_bias="0.962"
             app:srcCompat="@drawable/mic" />
 
         <Button
             android:id="@+id/finish"
-            android:layout_width="160dp"
-            android:layout_height="70dp"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:background="@drawable/button_design"
+            android:fontFamily="@font/gyeonggy"
             android:text="다음"
             android:textColor="#ffffff"
             android:textSize="22dp"
-            android:fontFamily="@font/gyeonggy"
-            android:background="@drawable/button_design"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.936"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.96" />
+            app:layout_constraintVertical_bias="0.962" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
-            android:layout_width="371dp"
-            android:layout_height="175dp"
+            android:layout_width="330dp"
+            android:layout_height="167dp"
             android:background="@drawable/border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.158">
+            app:layout_constraintVertical_bias="0.064">
 
             <ImageButton
                 android:id="@+id/imgbtn_speaker"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="48dp"
+                android:layout_marginEnd="36dp"
                 android:layout_marginBottom="68dp"
                 android:background="#00000000"
                 android:scaleType="fitCenter"
@@ -71,15 +71,15 @@
                 android:id="@+id/sampleText1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:fontFamily="@font/gyeonggy"
+                android:layout_marginTop="28dp"
+                android:fontFamily="@font/ridibatang"
                 android:text="[ 표준 발음 ]"
                 android:textColor="#000000"
                 android:textSize="18dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/result"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.11"
+                app:layout_constraintHorizontal_bias="0.171"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sentenceData"
                 app:layout_constraintVertical_bias="0.558" />
@@ -88,29 +88,29 @@
                 android:id="@+id/standard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/gyeonggy"
+                android:fontFamily="@font/ridibatang"
                 android:text="안녕하세요"
                 android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.115"
+                app:layout_constraintHorizontal_bias="0.153"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sampleText1"
-                app:layout_constraintVertical_bias="0.265" />
+                app:layout_constraintVertical_bias="0.301" />
 
             <TextView
                 android:id="@+id/sentenceData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/gyeonggy"
+                android:fontFamily="@font/ridibatang"
                 android:text="주어진 문장"
                 android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.102"
+                app:layout_constraintHorizontal_bias="0.154"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.192" />
+                app:layout_constraintVertical_bias="0.194" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -118,46 +118,62 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
+            android:fontFamily="@font/ridibatang"
             android:text="@string/warning1"
             android:textColor="#000000"
             android:textSize="18dp"
-            android:fontFamily="@font/gyeonggy"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.234"
+            app:layout_constraintHorizontal_bias="0.222"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.002" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/ridibatang"
             android:text="[ 주 의 사 항 ]"
-            android:textSize="24dp"
             android:textColor="#000000"
+            android:textSize="24dp"
             android:textStyle="bold"
-            android:fontFamily="@font/gyeonggy"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.124"
+            app:layout_constraintHorizontal_bias="0.136"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-            app:layout_constraintVertical_bias="0.102" />
+            app:layout_constraintVertical_bias="0.087" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:fontFamily="@font/gyeonggy"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/ridibatang"
             android:text="@string/warning2"
             android:textColor="#000000"
             android:textSize="18dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.304"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:fontFamily="@font/ridibatang"
+            android:text="@string/warning3"
+            android:textColor="#000000"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.444"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

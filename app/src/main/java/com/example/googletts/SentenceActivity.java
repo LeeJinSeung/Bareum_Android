@@ -40,7 +40,7 @@ public class SentenceActivity extends AppCompatActivity {
         imgbtnNext = findViewById(R.id.imgbtn_next);
         imgbtnPrev = findViewById(R.id.imgbtn_prev);
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+        adapter = new ArrayAdapter(this, R.layout.listview_item, items);
 
         mListView.setAdapter(adapter);
 

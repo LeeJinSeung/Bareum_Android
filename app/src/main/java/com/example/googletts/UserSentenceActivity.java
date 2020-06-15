@@ -59,7 +59,7 @@ public class UserSentenceActivity extends AppCompatActivity {
         mListView = findViewById(R.id.listView);
         sentenceDTO = (ArrayList<TestDTO>) intent.getSerializableExtra("sentence");
         items = new ArrayList<String>();
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+        adapter = new ArrayAdapter(this, R.layout.listview_item, items);
         imgbtnNext = findViewById(R.id.imgbtn_next);
         imgbtnPrev = findViewById(R.id.imgbtn_prev);
 

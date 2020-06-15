@@ -9,4 +9,9 @@
         app:font="@font/gyeonggy"
         app:fontStyle="normal"
         app:fontWeight="300"/>
+
+    <font
+        app:font="@font/ridibatang"
+        app:fontStyle="normal"
+        app:fontWeight="200"/>
 </font-family>
