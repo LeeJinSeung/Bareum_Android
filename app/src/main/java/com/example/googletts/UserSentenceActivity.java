@@ -66,9 +66,8 @@ public class UserSentenceActivity extends AppCompatActivity {
         mListView.setAdapter(adapter);
         createTextView();
 
-        page = page + 1;
         imgbtnPrev.setEnabled(false);
-        if(page == (sentenceDTO.size() -1)/9 + 1) {
+        if(page == (sentenceDTO.size() -1)/9) {
             imgbtnNext.setEnabled(false);
         }
         else {
@@ -208,7 +207,7 @@ public class UserSentenceActivity extends AppCompatActivity {
                 // 문장 삭제 체크리스트 활성화
                 Toast.makeText(getApplicationContext(), "문장삭제 버튼 클릭됨", Toast.LENGTH_LONG).show();
                 Intent intent2 = new Intent(UserSentenceActivity.this, DeleteSentenceActivity.class);
-                intent2.putExtra("sentence", (Serializable) sentence);
+                intent2.putExtra("sentence", (Serializable) sentenceDTO);
                 startActivityForResult(intent2, REQUEST_DELETE);
                 return true;
 
@@ -249,7 +248,7 @@ public class UserSentenceActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Log.e("insert sentence", "success");
                 removeTextView();
-                sentenceDTO = (ArrayList<TestDTO>) data.getSerializableExtra("sentence");
+                sentenceDTO.add((TestDTO) data.getSerializableExtra("sentence"));
                 createTextView();
             }
         }
@@ -295,7 +294,7 @@ public class UserSentenceActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO: 발음평가로 이동
                 Intent intent = new Intent(UserSentenceActivity.this, EvaluationActivity.class);
-                intent.putExtra("sentence", sentenceDTO.get(position));
+                intent.putExtra("sentence", sentenceDTO.get(page*9 + position));
                 startActivity(intent);
             }
         });

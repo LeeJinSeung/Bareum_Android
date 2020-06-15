@@ -77,9 +77,8 @@ public class WordbookActivity extends AppCompatActivity {
         Log.e("WordBookDTO size : ",Integer.toString(wordbookDTO.size()));
 
         createTextView();
-        page = page + 1;
         imgbtnPrev.setEnabled(false);
-        if(page == (wordbookDTO.size() -1)/9 + 1) {
+        if(page == (wordbookDTO.size() -1)/9) {
             imgbtnNext.setEnabled(false);
         }
         else {
@@ -307,7 +306,7 @@ public class WordbookActivity extends AppCompatActivity {
                 // To SentenceAcitivity
                 Intent intent = new Intent(WordbookActivity.this, SentenceActivity.class);
                 //TODO 단어가 포함되어 있는 문장 리스트 (key 확인)
-                intent.putExtra("sentence", (ArrayList)wordbookDTO.get(position).getRecommend());
+                intent.putExtra("sentence", (ArrayList)wordbookDTO.get(page*9 + position).getRecommend());
                 startActivity(intent);
             }
         });

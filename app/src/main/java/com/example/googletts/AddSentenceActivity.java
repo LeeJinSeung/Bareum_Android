@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.googletts.Retrofit.DTO.InsertSentenceDTO;
 import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.DTO.messageDTO;
 import com.example.googletts.Retrofit.NetworkHelper;
@@ -26,7 +27,7 @@ import retrofit2.Response;
 public class AddSentenceActivity extends AppCompatActivity {
 
     private EditText editText;
-    private messageDTO insResult;
+    private InsertSentenceDTO insResult;
     private ArrayList<TestDTO> newSentence;
 
     @Override
@@ -55,11 +56,11 @@ public class AddSentenceActivity extends AppCompatActivity {
                 String sentence = editText.getText().toString();
 
                 NetworkHelper networkHelper = new NetworkHelper();
-                Call<messageDTO> call = networkHelper.getApiService().insertSentaence(sentence);
+                Call<InsertSentenceDTO> call = networkHelper.getApiService().insertSentaence(sentence);
 
-                call.enqueue(new Callback<messageDTO>() {
+                call.enqueue(new Callback<InsertSentenceDTO>() {
                     @Override
-                    public void onResponse(Call<messageDTO> call, Response<messageDTO> response) {
+                    public void onResponse(Call<InsertSentenceDTO> call, Response<InsertSentenceDTO> response) {
                         if (!response.isSuccessful()) {
                             try {
                                 Log.e("Request Message", response.errorBody().string());
@@ -84,42 +85,43 @@ public class AddSentenceActivity extends AppCompatActivity {
                         else if(insResult.getMessage().contains("insSentenceControl success")) {
                             Log.e("insert", "success");
                             Toast.makeText(getApplicationContext(), "문장추가 완료", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(AddSentenceActivity.this, UserSentenceActivity.class);
+                            intent.putExtra("sentence", insResult.getSentence());
+                            setResult(RESULT_OK, intent);
+                            finish();
 
 
-                            Call<List<TestDTO>> call1 = networkHelper.getApiService().requestUserSentence();
-                            call1.enqueue(new Callback<List<TestDTO>>() {
-                                @Override
-                                public void onResponse(Call<List<TestDTO>> call1, Response<List<TestDTO>> response1) {
-                                    if (!response1.isSuccessful()) {
-                                        try {
-                                            Log.e("Request Message", response1.errorBody().string());
-                                        } catch (IOException e) {
-                                            Log.e("Request IOException", "fuck");
-                                        }
-                                        return;
-                                    }
-                                    Log.e("response", "OK");
-                                    Log.e("body", response1.body().toString());
+//                            Call<List<TestDTO>> call1 = networkHelper.getApiService().requestUserSentence();
+//                            call1.enqueue(new Callback<List<TestDTO>>() {
+//                                @Override
+//                                public void onResponse(Call<List<TestDTO>> call1, Response<List<TestDTO>> response1) {
+//                                    if (!response1.isSuccessful()) {
+//                                        try {
+//                                            Log.e("Request Message", response1.errorBody().string());
+//                                        } catch (IOException e) {
+//                                            Log.e("Request IOException", "fuck");
+//                                        }
+//                                        return;
+//                                    }
+//                                    Log.e("response", "OK");
+//                                    Log.e("body", response1.body().toString());
+//
+//                                    newSentence = (ArrayList<TestDTO>) response1.body();
+//
 
-                                    newSentence = (ArrayList<TestDTO>) response1.body();
-
-                                    Intent intent = new Intent(AddSentenceActivity.this, UserSentenceActivity.class);
-                                    intent.putExtra("sentence", newSentence);
-                                    setResult(RESULT_OK, intent);
-                                    finish();
-                                    // startActivity(intent);
-                                }
-
-                                @Override
-                                public void onFailure(Call<List<TestDTO>> call1, Throwable t) {
-                                    Log.e("Request : ", "fail " + t.getCause());
-                                }
-                            });
+//                                    // startActivity(intent);
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<List<TestDTO>> call1, Throwable t) {
+//                                    Log.e("Request : ", "fail " + t.getCause());
+//                                }
+//                            });
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<messageDTO> call, Throwable t) {
+                    public void onFailure(Call<InsertSentenceDTO> call, Throwable t) {
                         Log.e("Request : ", "fail " + t.getCause());
                     }
                 });

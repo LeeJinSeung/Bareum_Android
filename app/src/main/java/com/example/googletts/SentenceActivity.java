@@ -39,12 +39,6 @@ public class SentenceActivity extends AppCompatActivity {
         items = new ArrayList<String>();
         imgbtnNext = findViewById(R.id.imgbtn_next);
         imgbtnPrev = findViewById(R.id.imgbtn_prev);
-//        imgbtnPrev.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                return true;
-//            }
-//        });
 
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
 
@@ -55,9 +49,8 @@ public class SentenceActivity extends AppCompatActivity {
         Log.e("sentence size ", Integer.toString(sentence.size()));
 
         createTextView();
-        page = page + 1;
         imgbtnPrev.setEnabled(false);
-        if(page == (sentence.size() -1)/10 + 1) {
+        if(page == (sentence.size() -1)/10) {
             imgbtnNext.setEnabled(false);
         }
         else {
@@ -66,6 +59,7 @@ public class SentenceActivity extends AppCompatActivity {
             imgbtnNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.e("next before page", Integer.toString(page));
                     removeTextView();
                     page = page + 1;
                     createTextView();
@@ -75,12 +69,14 @@ public class SentenceActivity extends AppCompatActivity {
                     if (page > 0) {
                         imgbtnPrev.setEnabled(true);
                     }
+                    Log.e("next after page", Integer.toString(page));
                 }
             });
 
             imgbtnPrev.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.e("prev before page", Integer.toString(page));
                     removeTextView();
                     page = page - 1;
                     createTextView();
@@ -90,6 +86,7 @@ public class SentenceActivity extends AppCompatActivity {
                     if (page < (sentence.size() - 1) / 10) {
                         imgbtnNext.setEnabled(true);
                     }
+                    Log.e("prev after page", Integer.toString(page));
                 }
             });
         }
@@ -103,8 +100,9 @@ public class SentenceActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("position : ", Integer.toString(position));
                 Intent intent = new Intent(SentenceActivity.this, EvaluationActivity.class);
-                intent.putExtra("sentence", sentence.get(position));
+                intent.putExtra("sentence", sentence.get(page * 10 + position));
                 startActivity(intent);
             }
         });
