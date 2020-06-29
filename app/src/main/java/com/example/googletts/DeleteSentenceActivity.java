@@ -78,7 +78,7 @@ public class DeleteSentenceActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings1:
                 // 문장 추가 삭제 완료.
-                Toast.makeText(getApplicationContext(), "문장삭제 확인 클릭", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "문장이 삭제되었습니디.", Toast.LENGTH_LONG).show();
 
                 ArrayList<Integer> selectedItems = new ArrayList<>();
                 ArrayList<Integer> delIdx = new ArrayList<>();

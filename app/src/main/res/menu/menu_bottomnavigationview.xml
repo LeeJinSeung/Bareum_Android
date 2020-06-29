@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/resultItem"
-        android:icon="@drawable/analysis"
+        android:icon="@drawable/research"
         android:title="종합결과" />
     <item
         android:id="@+id/sentenceItem"
-        android:icon="@android:drawable/ic_menu_camera"
+        android:icon="@drawable/book"
         android:title="사용자문장" />
     <item
         android:id="@+id/wordbookItem"

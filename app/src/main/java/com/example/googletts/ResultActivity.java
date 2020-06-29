@@ -24,11 +24,13 @@ import com.example.googletts.Retrofit.DTO.TestDTO;
 import com.example.googletts.Retrofit.DTO.WordBookDTO;
 import com.example.googletts.Retrofit.NetworkHelper;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -49,6 +51,9 @@ public class ResultActivity extends AppCompatActivity {
     private TableLayout mtableLayout;
     private List<TestDTO> userSentence;
     private List<WordBookDTO> wordbookDTO;
+    private String[] mMonths = new String[] {
+            "1", "2", "3", "4", "5"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,37 +73,56 @@ public class ResultActivity extends AppCompatActivity {
             Log.e("score", result.getScore().toString());
             for (int i = 0; i < 5; i++) {
                 float val = result.getScore().get(i);
-                values.add(new Entry(i + 1, val));
+                values.add(new Entry((Integer)i + 1, val * 100));
             }
 
             LineDataSet set1;
             set1 = new LineDataSet(values, "최근 발음 평가 점수");
 
+
+
+
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1); // add the data sets
+
+            // chart color change
+            // set1.setColor(Color.BLUE);
+
 
             // create a data object with the data sets
             LineData data = new LineData(dataSets);
 
+            set1.setColor(getResources().getColor(R.color.colorPrimary));
+            // set1.setCircleHoleColor(getResources().getColor(R.color.colorRed));
+            set1.setCircleColor(getResources().getColor(R.color.colorPrimary));
+            set1.setValueTextSize(13);
+            set1.setLineWidth(3);
+
             XAxis xAxis = chart.getXAxis();
 
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            // xAxis.setTextColor(Color.BLACK);
+            xAxis.setTextSize(10);
+            xAxis.setEnabled(true);
 
-            xAxis.setLabelCount(1);
-            // xAxis.setDrawLabels(true);
+            xAxis.setAxisMinimum(1f);
+            xAxis.setAxisMaximum(5f);
+            xAxis.setDrawLabels(true);
+            xAxis.setLabelCount(4);
+
+
 
 
             YAxis yAxisLeft = chart.getAxisLeft();
-            yAxisLeft.setAxisMinimum(0);
-            yAxisLeft.setAxisMaximum(1);
+            // yAxisLeft.setTextColor(Color.BLACK);
+            yAxisLeft.setAxisMinimum(0f);
+            yAxisLeft.setAxisMaximum(100f);
+            yAxisLeft.setTextSize(10);
 
             YAxis yAxisRight = chart.getAxisRight();
             yAxisRight.setDrawLabels(false);
+            yAxisRight.setDrawAxisLine(false);
             yAxisRight.setDrawGridLines(false);
-
-            // black lines and points
-            set1.setColor(Color.BLACK);
-            set1.setCircleColor(Color.BLACK);
 
             chart.getDescription().setEnabled(false);
             // set data
@@ -160,8 +184,8 @@ public class ResultActivity extends AppCompatActivity {
                 newPosTv.setTextColor(Color.BLACK);
                 newPhoTv.setTextColor(Color.BLACK);
 
-                newTr.addView(newPosTv);
                 newTr.addView(newPhoTv);
+                newTr.addView(newPosTv);
                 mtableLayout.addView(newTr);
             }
         }

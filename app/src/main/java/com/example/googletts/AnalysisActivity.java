@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.googletts.Retrofit.Config;
 import com.example.googletts.Retrofit.DTO.AudioConfig;
+import com.example.googletts.Retrofit.DTO.InsertWordDTO;
 import com.example.googletts.Retrofit.DTO.SynthesisInput;
 import com.example.googletts.Retrofit.DTO.SynthesizeDTO;
 import com.example.googletts.Retrofit.DTO.SynthesizeRequestDTO;
@@ -112,9 +113,9 @@ public class AnalysisActivity extends AppCompatActivity {
         mTextSentenceData.setText(sentenceData);
         mTextStandard.setText(standard);
         mTextResult.setText(sp);
-        mTextScore.setText(Float.toString(score));
+        mTextScore.setText(Integer.toString((int)score));
 
-        if(status.equals("perfect"))
+        if(status.equals("perfect") || wordList.isEmpty())
             mLayoutWord.setVisibility(View.GONE);
 
         mImageButtonSpeak.setOnClickListener(new View.OnClickListener() {
@@ -201,13 +202,13 @@ public class AnalysisActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 단어장에 단어 추가
-                                Call<messageDTO> call = networkHelper.getApiService().insertWordBook(parent.getItemAtPosition(position).toString());
+                                Call<InsertWordDTO> call = networkHelper.getApiService().insertWordBook(parent.getItemAtPosition(position).toString());
 
-                                call.enqueue(new Callback<messageDTO>() {
+                                call.enqueue(new Callback<InsertWordDTO>() {
                                     @Override
-                                    public void onResponse(Call<messageDTO> call, Response<messageDTO> response) {
+                                    public void onResponse(Call<InsertWordDTO> call, Response<InsertWordDTO> response) {
                                         if (response.isSuccessful()) {
-                                            messageDTO body = response.body();
+                                            InsertWordDTO body = response.body();
                                             if (body != null) {
                                                 String responseMessage = body.getMessage();
 
@@ -220,7 +221,7 @@ public class AnalysisActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<messageDTO> call, Throwable t) {
+                                    public void onFailure(Call<InsertWordDTO> call, Throwable t) {
                                         System.out.println("onFailure" + call);
                                         Log.e("Request", "Failure");
                                     }

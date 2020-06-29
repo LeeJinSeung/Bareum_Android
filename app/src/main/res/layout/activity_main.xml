@@ -11,10 +11,10 @@
         android:id="@+id/constraintLayout3"
         android:layout_width="230dp"
         android:layout_height="215dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/border"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -54,10 +54,10 @@
         android:background="@drawable/border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.135">
 
         <ImageButton
             android:id="@+id/imgbtn_analysis"
@@ -80,7 +80,7 @@
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/ridibatang"
             android:gravity="center"
-            android:text="마이페이지"
+            android:text="마이 페이지"
             android:textColor="#000000"
             android:textSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent"

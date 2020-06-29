@@ -44,7 +44,6 @@ public class UserSentenceActivity extends AppCompatActivity {
     private ImageButton imgbtnPrev;
     private ImageButton imgbtnNext;
 
-    private List<TestDTO> sentence;
     private int REQUEST_INSERT = 1;
     private int REQUEST_DELETE = 2;
     private int page = 0;
@@ -198,14 +197,14 @@ public class UserSentenceActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings1:
                 // 문장 추가 하는 텍스트
-                Toast.makeText(getApplicationContext(), "문장추가 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(), "문장추가 버튼 클릭됨", Toast.LENGTH_LONG).show();
                 Intent intent1 = new Intent(UserSentenceActivity.this, AddSentenceActivity.class);
                 startActivityForResult(intent1, REQUEST_INSERT);
                 return true;
 
             case R.id.action_settings2:
                 // 문장 삭제 체크리스트 활성화
-                Toast.makeText(getApplicationContext(), "문장삭제 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(), "문장삭제 버튼 클릭됨", Toast.LENGTH_LONG).show();
                 Intent intent2 = new Intent(UserSentenceActivity.this, DeleteSentenceActivity.class);
                 intent2.putExtra("sentence", (Serializable) sentenceDTO);
                 startActivityForResult(intent2, REQUEST_DELETE);

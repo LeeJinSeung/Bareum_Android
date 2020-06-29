@@ -84,7 +84,7 @@ public class AddSentenceActivity extends AppCompatActivity {
                         }
                         else if(insResult.getMessage().contains("insSentenceControl success")) {
                             Log.e("insert", "success");
-                            Toast.makeText(getApplicationContext(), "문장추가 완료", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "문장이 추가되었습니다.", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(AddSentenceActivity.this, UserSentenceActivity.class);
                             intent.putExtra("sentence", insResult.getSentence());
                             setResult(RESULT_OK, intent);

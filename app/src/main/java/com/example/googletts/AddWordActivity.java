@@ -81,7 +81,7 @@ public class AddWordActivity extends AppCompatActivity {
                         }
                         else if(insResult.getMessage().contains("insWordBookControl Success")) {
                             Log.e("insert", "insWordBookControl Success");
-                            Toast.makeText(getApplicationContext(), "단어추가 완료", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "단어가 추가되었습니다.", Toast.LENGTH_LONG).show();
 
                             Intent intent = new Intent(AddWordActivity.this, WordbookActivity.class);
                             intent.putExtra("newWord", (Serializable) insResult);

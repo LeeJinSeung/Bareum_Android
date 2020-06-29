@@ -38,13 +38,14 @@ import retrofit2.Response;
 public class WordbookActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private List<WordBookDTO> wordbookDTO;
+    private ArrayList<WordBookDTO> wordbookDTO;
     private ArrayList<String> items;
     private ArrayAdapter adapter;
     private InsertWordDTO newWord;
     private ImageButton imgbtnPrev;
     private ImageButton imgbtnNext;
     private List<TestDTO> userSentence;
+    private List<TestDTO> reccomend;
 
     private ArrayList<WordBookDTO> words; // 원래 문장
     private int REQUEST_INSERT = 1;
@@ -67,7 +68,7 @@ public class WordbookActivity extends AppCompatActivity {
         items = new ArrayList<String>();
         adapter = new ArrayAdapter(this, R.layout.listview_item, items);
 
-        wordbookDTO = (List<WordBookDTO>) intent.getSerializableExtra("word");
+        wordbookDTO = (ArrayList<WordBookDTO>) intent.getSerializableExtra("word");
         newWord = new InsertWordDTO();
 
         mListView.setAdapter((adapter));
@@ -209,16 +210,16 @@ public class WordbookActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings1:
                 // 문장 추가 하는 텍스트
-                Toast.makeText(getApplicationContext(), "단어추가 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(), "단어추가 버튼 클릭됨", Toast.LENGTH_LONG).show();
                 Intent intent1 = new Intent(WordbookActivity.this, AddWordActivity.class);
                 startActivityForResult(intent1, REQUEST_INSERT);
                 return true;
 
             case R.id.action_settings2:
                 // 문장 삭제 체크리스트 활성화
-                Toast.makeText(getApplicationContext(), "단어삭제 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(), "단어삭제 버튼 클릭됨", Toast.LENGTH_LONG).show();
                 Intent intent2 = new Intent(WordbookActivity.this, DeleteWordActivity.class);
-                intent2.putExtra("word", words);
+                intent2.putExtra("word", wordbookDTO);
                 startActivityForResult(intent2, REQUEST_DELETE);
                 return true;
 
@@ -304,10 +305,37 @@ public class WordbookActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // To SentenceAcitivity
-                Intent intent = new Intent(WordbookActivity.this, SentenceActivity.class);
-                //TODO 단어가 포함되어 있는 문장 리스트 (key 확인)
-                intent.putExtra("sentence", (ArrayList)wordbookDTO.get(page*9 + position).getRecommend());
-                startActivity(intent);
+
+                NetworkHelper networkHelper1 = new NetworkHelper();
+                Call<List<TestDTO>> call1 = networkHelper1.getApiService().requestRecommend(wordbookDTO.get(position).getWordData());
+                Log.e("Request : ", "sentence hihihihihii ");
+                call1.enqueue(new Callback<List<TestDTO>>() {
+                    @Override
+                    public void onResponse(Call<List<TestDTO>> call1, Response<List<TestDTO>> response) {
+                        Log.e("Request : ", "success " + response.isSuccessful());
+                        Log.e("Request code", Integer.toString(response.code()));
+                        if (!response.isSuccessful()) {
+                            try {
+                                Log.e("Request Message", response.errorBody().string());
+                            } catch (IOException e) {
+                                Log.e("Request IOException", "fuck");
+                            }
+                            return;
+                        }
+
+                        reccomend = response.body();
+                        Log.e("Request Success: ", reccomend.toString());
+
+                        Intent intentSentence = new Intent(WordbookActivity.this, SentenceActivity.class);
+                        intentSentence.putExtra("sentence", (Serializable) reccomend);
+                        startActivity(intentSentence);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<TestDTO>> call1, Throwable t) {
+                        Log.e("Request : ", "fail " + t.getCause());
+                    }
+                });
             }
         });
 
