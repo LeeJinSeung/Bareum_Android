@@ -240,7 +240,7 @@ public class UserSentenceActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
 
             } else {   // RESULT_CANCEL
-                Toast.makeText(UserSentenceActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(UserSentenceActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
         }
         else if(requestCode == REQUEST_INSERT) {
@@ -310,6 +310,4 @@ public class UserSentenceActivity extends AppCompatActivity {
         }
         adapter.notifyDataSetChanged();
     }
-
-
 }

@@ -251,7 +251,7 @@ public class WordbookActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
 
             } else {   // RESULT_CANCEL
-                Toast.makeText(WordbookActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(WordbookActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
         }
         else if(requestCode == REQUEST_INSERT) {
